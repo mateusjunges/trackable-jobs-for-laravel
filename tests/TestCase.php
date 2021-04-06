@@ -41,11 +41,22 @@ class TestCase extends Orchestra
     private function configureDatabase($app)
     {
         $app['config']->set('trackable-jobs.tables.tracked_jobs', 'tracked_jobs');
+        $app['config']->set('queue.default', 'database');
 
         $app['db']->connection()->getSchemaBuilder()->create('test_users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('jobs', function(Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('queue')->index();
+            $table->longText('payload');
+            $table->unsignedTinyInteger('attempts');
+            $table->unsignedInteger('reserved_at')->nullable();
+            $table->unsignedInteger('available_at');
+            $table->unsignedInteger('created_at');
         });
 
         include_once __DIR__.'/../database/migrations/2021_04_16_005274_laravel_trackable_create_tracked_jobs_table.php';
