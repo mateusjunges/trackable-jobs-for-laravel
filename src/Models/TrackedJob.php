@@ -54,7 +54,7 @@ class TrackedJob extends Model
         ]);
     }
 
-    public function markAsFinished(string $message = "") : bool
+    public function markAsFinished(string $message = null) : bool
     {
         if ($message) {
             $this->setOutput($message);
