@@ -19,7 +19,15 @@ class TrackedJob extends Model
 
     protected $table = "";
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'trackable_id',
+        'trackable_type',
+        'name',
+        'status',
+        'output',
+        'started_at',
+        'finished_at',
+    ];
 
     protected $casts = [
         'started_at' => 'datetime',
