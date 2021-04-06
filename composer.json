@@ -6,22 +6,37 @@
     "authors": [
         {
             "name": "Mateus Junges",
-            "email": "mateus@junges.dev"
+            "email": "mateus@junges.dev",
+            "role": "Software Engineer"
         }
     ],
+    "require": {
+        "php": "^7.4||^8.0",
+        "illuminate/support": "^6.0|^7.0|^8.0",
+        "illuminate/queue": "^6.0|^7.0|^8.0",
+        "illuminate/database": "^6.0|^7.0|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.17"
+    },
     "autoload": {
         "psr-4": {
             "Junges\\TrackableJobs\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Junges\\TrackableJobs\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
-
+                "Junges\\TrackableJobs\\Providers\\TrackableJobsServiceProvider"
             ]
         }
     },
-    "require-dev": {
-        "orchestra/testbench": "^6.17"
+    "scripts": {
+        "test": "vendor/bin/phpunit tests"
     }
 }
