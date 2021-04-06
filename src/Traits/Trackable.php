@@ -2,6 +2,7 @@
 
 namespace Junges\TrackableJobs\Traits;
 
+use Junges\TrackableJobs\Http\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
@@ -24,6 +25,11 @@ trait Trackable
             'trackable_type' => get_class($this->model),
             'name' => class_basename(static::class),
         ]);
+    }
+
+    public function middleware()
+    {
+        return [new TrackedJobMiddleware()];
     }
 
     public function failed(Throwable $exception)
