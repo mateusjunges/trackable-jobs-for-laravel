@@ -2,7 +2,7 @@
 
 namespace Junges\TrackableJobs\Traits;
 
-use Junges\TrackableJobs\Http\Middleware\TrackedJobMiddleware;
+use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\TrackableJobs\Http\Middleware;
+namespace Junges\TrackableJobs\Jobs\Middleware;
 
 use Throwable;
 
