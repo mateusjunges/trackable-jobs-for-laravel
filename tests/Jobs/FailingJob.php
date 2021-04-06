@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\TrackableJobs\Tests;
+namespace Junges\TrackableJobs\Tests\Jobs;
 
 use Exception;
 use Illuminate\Bus\Queueable;

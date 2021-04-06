@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\TrackableJobs\Tests;
+namespace Junges\TrackableJobs\Tests\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

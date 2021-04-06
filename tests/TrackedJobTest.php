@@ -4,6 +4,8 @@ namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Junges\TrackableJobs\Models\TrackedJob;
+use Junges\TrackableJobs\Tests\Jobs\FailingJob;
+use Junges\TrackableJobs\Tests\Jobs\TestJob;
 
 class TrackedJobTest extends TestCase
 {
