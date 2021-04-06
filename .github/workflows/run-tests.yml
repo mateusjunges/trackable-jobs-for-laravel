@@ -44,4 +44,4 @@ jobs:
         composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
 
     - name: PHPUnit Testing
-      run: vendor/bin/phpunit
+      run: vendor/bin/phpunit tests
