@@ -57,15 +57,43 @@ To use it, you just need to pass any model to your Job constructor:
 dispatch(new ProcessPodcastJob($podcast));
 ```
 
+## Tracking job chains
+Laravel supports job chaining out of the box:
+
+```php
+Bus::dispatchChain([
+    new OptimizePodcast($podcast),
+    new ReleasePodcast($podcast)
+])->dispatch();
+```
+
+It's a nice, fluent way of saying "Run this jobs sequentially, one after the previous one is complete.".
+
+You can use this package to track the status for each step when releasing a new podcast. It can be done by adding a `steps` relationship
+in your `Podcast` model:
+
+```php
+public function steps()
+{
+    return $this->morphMany(Junges\TrackableJobs\Models\TrackedJob::class, 'trackable');
+}
+```
+
+Now, you can have the status of each job that should be processed to release your podcast:
+
+```php
+$steps = Podcast::find($id)->steps()->get();
+```
+
 # Tests
 Run `composer test` to test this package.
 
 # Contributing
 Thank you for consider contributing for the Laravel Trackable Jobs package! The contribution guide can
-be found [here][contributing]
+be found [here][contributing].
 
 # Changelog
-Please see the [changelog][changelog] for more information about the changes on this package;
+Please see the [changelog][changelog] for more information about the changes on this package.
 
 # Credits
 - [All contributors][contributors]
