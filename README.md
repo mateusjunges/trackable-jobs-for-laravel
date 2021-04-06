@@ -1,4 +1,5 @@
 # Trackable Jobs For Laravel
+![Trackable jobs for laravel](https://banners.beyondco.de/Laravel%20Trackable%20Jobs.png?theme=light&packageManager=composer+require&packageName=mateusjunges%2Flaravel-trackable-jobs&pattern=architect&style=style_1&description=This+package+allows+you+to+track+your+laravel+jobs%21&md=1&showWatermark=1&fontSize=100px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg)
 This package allows you to track your laravel jobs!
 Using this package, you can easily persist the output and the status of any job in your application.
 
