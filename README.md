@@ -1,5 +1,61 @@
 # Trackable Jobs For Laravel
 This package allows you to track your laravel jobs!
+Using this package, you can easily persist the output and the status of any job in your application.
+
+# Installation
+To install this package, use composer:
+```bash
+composer require mateusjunges/laravel-trackable-jobs
+```
+
+You can publish the configuration file with this command:
+
+```bash
+php artisan vendor:publish --tag=trackable-jobs-config
+```
+
+Now you are good to go!
+
+# Usage
+## Tracking jobs
+To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Traits\Trackable` trait in the job you want to track.
+For example, let's say you want to track the status of `ProcessPodcastJob`, just add the `Trackable` trait into your job:
+
+```php
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Junges\TrackableJobs\Traits\Trackable;
+
+class ProcessPodcastJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+
+    public function handle()
+    {
+        //
+    }
+}
+```
+
+This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`.
+If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
+so this package still work as intended.
+
+This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the 
+`started_at` and `finished_at` timestamps for each tracked job.
+
+To use it, you just need to pass any model to your Job constructor:
+
+```php
+dispatch(new ProcessPodcastJob($podcast));
+```
 
 # Tests
 Run `composer test` to test this package.
