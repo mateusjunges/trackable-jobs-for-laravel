@@ -84,6 +84,4 @@ class TrackedJob extends Model
             'output' => $output
         ]);
     }
-
-
 }
