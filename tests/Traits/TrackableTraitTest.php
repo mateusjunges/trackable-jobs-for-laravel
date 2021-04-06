@@ -19,11 +19,11 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
 
         $this->doesntExpectEvents(JobFailed::class);
     }
@@ -36,11 +36,11 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
     }
 
     public function test_it_can_get_the_job_output()
@@ -51,13 +51,13 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
 
-        $this->assertEquals('This is a test job', TrackedJob::first()->output);
+        $this->assertSame('This is a test job', TrackedJob::first()->output);
     }
 
     public function test_it_can_get_the_output_for_failed_jobs()
@@ -68,12 +68,12 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
 
-        $this->assertEquals('This job failed.', TrackedJob::first()->output);
+        $this->assertSame('This job failed.', TrackedJob::first()->output);
     }
 }

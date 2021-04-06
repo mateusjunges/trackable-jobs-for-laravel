@@ -17,11 +17,11 @@ class TrackedJobTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
@@ -38,11 +38,11 @@ class TrackedJobTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
