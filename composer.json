@@ -1,0 +1,27 @@
+{
+    "name": "mateusjunges/laravel-trackable-jobs",
+    "description": "This package allows you to track your jobs",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mateus Junges",
+            "email": "mateus@junges.dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Junges\\TrackableJobs\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.17"
+    }
+}
