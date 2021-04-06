@@ -28,8 +28,8 @@ class TrackedJob extends Model
 
     public function __construct(array $attributes = [])
     {
-        $this->table = config("trackable-jobs.tables.tracked_jobs", "tracked_jobs");
         parent::__construct($attributes);
+        $this->setTable(config("trackable-jobs.tables.tracked_jobs", "tracked_jobs"));
     }
 
     public function trackable() : MorphTo
