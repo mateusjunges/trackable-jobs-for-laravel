@@ -12,15 +12,11 @@ trait Trackable
 
     public $trackedJob;
 
-    private $trackedJobsModel;
-
     public function __construct($model)
     {
-        $this->trackedJobsModel = app(config('trackable-jobs.models.tracked_jobs', TrackedJob::class));
-
         $this->model = $model;
 
-        $this->trackedJob = $this->trackedJobsModel->create([
+        $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->model->id,
             'trackable_type' => get_class($this->model),
             'name' => class_basename(static::class),

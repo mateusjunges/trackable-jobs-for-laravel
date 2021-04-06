@@ -13,9 +13,7 @@ class TrackedJobMiddleware
         try {
             $response = $next($job);
 
-            if ($response) {
-                $job->markAsFinished($response);
-            }
+            $job->markAsFinished($response);
         } catch (Throwable $exception) {
             $job->fail($exception);
         }
