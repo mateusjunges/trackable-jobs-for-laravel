@@ -42,4 +42,21 @@ class TrackableTraitTest extends TestCase
 
         $this->assertEquals(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
     }
+
+    public function test_it_can_get_the_output_for_failed_jobs()
+    {
+        $job = new FailingJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->assertEquals(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertEquals(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
+
+        $this->assertEquals('This job failed.', TrackedJob::first()->output);
+    }
 }
