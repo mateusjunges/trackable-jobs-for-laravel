@@ -25,7 +25,9 @@ class TrackedJobTest extends TestCase
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
-        $this->assertEquals($this->user, TrackedJob::first()->trackable);
+        $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
+
+        $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
     }
 
     public function test_it_can_get_the_correct_morph_for_failed_jobs()
@@ -44,6 +46,8 @@ class TrackedJobTest extends TestCase
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
-        $this->assertEquals($this->user, TrackedJob::first()->trackable);
+        $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
+
+        $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
     }
 }
