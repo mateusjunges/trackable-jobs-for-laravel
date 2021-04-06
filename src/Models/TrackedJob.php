@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class TrackedJob extends Model
 {
-    const STATUS_QUEUED = "queued";
-    const STATUS_STARTED = "started";
-    const STATUS_FINISHED = "finished";
-    const STATUS_FAILED = "failed";
+    const STATUS_QUEUED = 'queued';
+    const STATUS_STARTED = 'started';
+    const STATUS_FINISHED = 'finished';
+    const STATUS_FAILED = 'failed';
 
-    protected $table = "";
+    protected $table = '';
 
     protected $fillable = [
         'trackable_id',
@@ -31,57 +31,57 @@ class TrackedJob extends Model
     ];
 
     protected $casts = [
-        'started_at' => 'datetime',
+        'started_at'  => 'datetime',
         'finished_at' => 'datetime',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setTable(config("trackable-jobs.tables.tracked_jobs", "tracked_jobs"));
+        $this->setTable(config('trackable-jobs.tables.tracked_jobs', 'tracked_jobs'));
     }
 
-    public function trackable() : MorphTo
+    public function trackable(): MorphTo
     {
         return $this->morphTo('trackable');
     }
 
-    public function markAsStarted() : bool
+    public function markAsStarted(): bool
     {
         return $this->update([
-            'status' => static::STATUS_STARTED,
+            'status'     => static::STATUS_STARTED,
             'started_at' => now(),
         ]);
     }
 
-    public function markAsFinished(string $message = null) : bool
+    public function markAsFinished(string $message = null): bool
     {
         if ($message) {
             $this->setOutput($message);
         }
 
         return $this->update([
-            'status' => static::STATUS_FINISHED,
+            'status'      => static::STATUS_FINISHED,
             'finished_at' => now(),
         ]);
     }
 
-    public function markAsFailed(string $exception = null) : bool
+    public function markAsFailed(string $exception = null): bool
     {
         if ($exception) {
             $this->setOutput($exception);
         }
 
         return $this->update([
-            'status' => static::STATUS_FAILED,
+            'status'      => static::STATUS_FAILED,
             'finished_at' => now(),
         ]);
     }
 
-    public function setOutput(string $output) : bool
+    public function setOutput(string $output): bool
     {
         return $this->update([
-            'output' => $output
+            'output' => $output,
         ]);
     }
 }

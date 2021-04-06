@@ -1,4 +1,5 @@
 <?php
+
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -6,8 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * Class User
- * @package Junges\TrackableJobs\Tests
+ * Class User.
+ *
  * @mixin Builder
  */
 class User extends Authenticatable

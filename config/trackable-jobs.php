@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "tables" => [
-        "tracked_jobs" => "tracked_jobs"
-    ]
+    'tables' => [
+        'tracked_jobs' => 'tracked_jobs',
+    ],
 ];

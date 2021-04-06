@@ -24,7 +24,7 @@ class TestCase extends Orchestra
     public function getPackageProviders($app)
     {
         return [
-            TrackableJobsServiceProvider::class
+            TrackableJobsServiceProvider::class,
         ];
     }
 
@@ -49,7 +49,7 @@ class TestCase extends Orchestra
             $table->string('email');
         });
 
-        $app['db']->connection()->getSchemaBuilder()->create('jobs', function(Blueprint $table) {
+        $app['db']->connection()->getSchemaBuilder()->create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('queue')->index();
             $table->longText('payload');
@@ -64,8 +64,8 @@ class TestCase extends Orchestra
         (new \LaravelTrackableCreateTrackedJobsTable())->up();
 
         User::create([
-            'name' => 'Test user',
-            'email' => 'test@test.com'
+            'name'  => 'Test user',
+            'email' => 'test@test.com',
         ]);
     }
 }
