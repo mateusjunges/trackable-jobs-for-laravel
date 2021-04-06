@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class TrackedJob extends Model
 {
+    const STATUS_QUEUED = "queued";
     const STATUS_STARTED = "started";
     const STATUS_FINISHED = "finished";
     const STATUS_FAILED = "failed";
