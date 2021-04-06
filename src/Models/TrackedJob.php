@@ -55,7 +55,9 @@ class TrackedJob extends Model
 
     public function markAsFinished(string $message = "") : bool
     {
-        $this->setOutput($message);
+        if ($message) {
+            $this->setOutput($message);
+        }
 
         return $this->update([
             'status' => static::STATUS_FINISHED,
@@ -63,9 +65,11 @@ class TrackedJob extends Model
         ]);
     }
 
-    public function markAsFailed(string $exception = "") : bool
+    public function markAsFailed(string $exception = null) : bool
     {
-        $this->setOutput($exception);
+        if ($exception) {
+            $this->setOutput($exception);
+        }
 
         return $this->update([
             'status' => static::STATUS_FAILED,
