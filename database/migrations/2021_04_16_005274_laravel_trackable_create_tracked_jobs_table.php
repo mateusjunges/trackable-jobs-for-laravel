@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 class LaravelTrackableCreateTrackedJobsTable extends Migration
 {
-    private string $table_name = "";
+    private string $table_name = '';
 
     public function __construct()
     {
-        $this->table_name = config("trackable-jobs.tables.tracked_jobs", "tracked_jobs");
+        $this->table_name = config('trackable-jobs.tables.tracked_jobs', 'tracked_jobs');
     }
 
     public function up()
     {
-        Schema::create($this->table_name, function(Blueprint $table) {
+        Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('trackable_id')->index();
             $table->string('trackable_type')->index();

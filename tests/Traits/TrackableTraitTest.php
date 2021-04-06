@@ -6,8 +6,8 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobFailed;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
-use Junges\TrackableJobs\Tests\TestCase;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\TestCase;
 
 class TrackableTraitTest extends TestCase
 {

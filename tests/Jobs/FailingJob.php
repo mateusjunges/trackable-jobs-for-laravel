@@ -12,7 +12,11 @@ use Junges\TrackableJobs\Traits\Trackable;
 
 class FailingJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use Trackable;
 
     public function handle()
     {
