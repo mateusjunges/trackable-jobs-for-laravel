@@ -10,6 +10,17 @@
 This package allows you to track your laravel jobs!
 Using this package, you can easily persist the output and the status of any job in your application.
 
+- [1. Installation](#installation)
+- [2. Usage](#usage)
+    - [2.1 Tracking jobs](#tracking-jobs)
+    - [2.2 Tracking job chains](#tracking-job-chains)
+    - [2.3 Extending the `TrackedJob` model](#extending-the-trackedjob-model)
+- [3. Tests](#tests)
+- [4. Contributing](#contributing)
+- [5. Changelog](#changelog)
+- [6. Credits](#credits)
+- [7. License](#license)
+
 # Installation
 To install this package, use composer:
 ```bash
@@ -157,6 +168,44 @@ Now, you can have the status of each job that should be processed to release you
 
 ```php
 $steps = Podcast::find($id)->steps()->get();
+```
+
+## Extending the `TrackedJob` model.
+If, for some reason, you need to use your own custom model to the TrackedJob table, you can just create a new model
+and extend the existing `Junges\TrackableJobs\Models\TrackedJob::class`.
+Then, you need to bind the `Junges\TrackableJobs\Contracts\TrackableJobContract` to the new model, within your `AppServiceProvider`:
+
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Models\YourCustomModel;
+use Illuminate\Support\ServiceProvider;
+use Junges\TrackableJobs\Contracts\TrackableJobContract;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->bind(TrackableJobContract::class, YourCustomModel::class);
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+}
 ```
 
 # Tests
