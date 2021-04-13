@@ -5,13 +5,14 @@ namespace Junges\TrackableJobs\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
 /***
  * Class TrackedJob
  * @package Junges\TrackableJobs\Models
  * @mixin Builder
  */
-class TrackedJob extends Model
+class TrackedJob extends Model implements TrackableJobContract
 {
     const STATUS_QUEUED = 'queued';
     const STATUS_STARTED = 'started';

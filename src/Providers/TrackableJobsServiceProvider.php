@@ -3,6 +3,8 @@
 namespace Junges\TrackableJobs\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Junges\TrackableJobs\Contracts\TrackableJobContract;
+use Junges\TrackableJobs\Models\TrackedJob;
 
 class TrackableJobsServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,6 @@ class TrackableJobsServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        $this->app->bind(TrackableJobContract::class, TrackedJob::class);
     }
 }

@@ -10,6 +10,17 @@
 This package allows you to track your laravel jobs!
 Using this package, you can easily persist the output and the status of any job in your application.
 
+- [1. Installation](#installation)
+- [2. Usage](#usage)
+    - [2.1 Tracking jobs](#tracking-jobs)
+    - [2.2 Tracking job chains](#tracking-job-chains)
+    - [2.3 Extending the `TrackedJob` model](#extending-the-trackedjob-model)
+- [3. Tests](#tests)
+- [4. Contributing](#contributing)
+- [5. Changelog](#changelog)
+- [6. Credits](#credits)
+- [7. License](#license)
+
 # Installation
 To install this package, use composer:
 ```bash
@@ -52,9 +63,49 @@ class ProcessPodcastJob implements ShouldQueue
 }
 ```
 
-This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`.
+This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public property to the job class.
 If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
 so this package still work as intended.
+
+For example: if you need to change the constructor of your job, copy the code from `Junges\TrackableJobs\Traits\Trackable` to your new constructor:
+
+```php
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Junges\TrackableJobs\Traits\Trackable;
+use App\Models\Podcast;
+use Junges\TrackableJobs\Models\TrackedJob;
+
+class ProcessPodcastJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+
+    public function __construct(Podcast $podcast)
+    {
+         $this->model = $podcast;
+         
+         $this->trackedJob = TrackedJob::create([
+            'trackable_id'   => $this->model->id,
+            'trackable_type' => get_class($this->model),
+            'name'           => class_basename(static::class),
+         ]);
+         
+         // Add your code here.
+    }
+
+    public function handle()
+    {
+        //
+    }
+}
+```
 
 This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the 
 `started_at` and `finished_at` timestamps for each tracked job.
@@ -81,9 +132,9 @@ return [
      | The table where the tracked jobs will be stored.
      | By default, it's called 'tracked_jobs'.
      */
-    'tables' => array(
+    'tables' => [
         'tracked_jobs' => 'tracked_jobs',
-    ),
+    ],
 ];
 ```
 
@@ -117,6 +168,44 @@ Now, you can have the status of each job that should be processed to release you
 
 ```php
 $steps = Podcast::find($id)->steps()->get();
+```
+
+## Extending the `TrackedJob` model.
+If, for some reason, you need to use your own custom model to the TrackedJob table, you can just create a new model
+and extend the existing `Junges\TrackableJobs\Models\TrackedJob::class`.
+Then, you need to bind the `Junges\TrackableJobs\Contracts\TrackableJobContract` to the new model, within your `AppServiceProvider`:
+
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Models\YourCustomModel;
+use Illuminate\Support\ServiceProvider;
+use Junges\TrackableJobs\Contracts\TrackableJobContract;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->bind(TrackableJobContract::class, YourCustomModel::class);
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+}
 ```
 
 # Tests

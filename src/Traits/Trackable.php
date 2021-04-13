@@ -2,15 +2,16 @@
 
 namespace Junges\TrackableJobs\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
 trait Trackable
 {
-    public $model;
+    public ?Model $model;
 
-    public $trackedJob;
+    public TrackedJob $trackedJob;
 
     public function __construct($model)
     {
