@@ -52,9 +52,49 @@ class ProcessPodcastJob implements ShouldQueue
 }
 ```
 
-This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`.
+This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public property to the job class.
 If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
 so this package still work as intended.
+
+For example: if you need to change the constructor of your job, copy the code from `Junges\TrackableJobs\Traits\Trackable` to your new constructor:
+
+```php
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Junges\TrackableJobs\Traits\Trackable;
+use App\Models\Podcast;
+use Junges\TrackableJobs\Models\TrackedJob;
+
+class ProcessPodcastJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+
+    public function __construct(Podcast $podcast)
+    {
+         $this->model = $podcast;
+         
+         $this->trackedJob = TrackedJob::create([
+            'trackable_id'   => $this->model->id,
+            'trackable_type' => get_class($this->model),
+            'name'           => class_basename(static::class),
+         ]);
+         
+         // Add your code here.
+    }
+
+    public function handle()
+    {
+        //
+    }
+}
+```
 
 This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the 
 `started_at` and `finished_at` timestamps for each tracked job.
