@@ -33,7 +33,7 @@ You can publish the configuration file with this command:
 php artisan vendor:publish --tag=trackable-jobs-config
 ```
 
-Now you are good to go!
+Run `php artisan migrate` to migrate the table needed by this package and now you are good to go!
 
 # Usage
 ## Tracking jobs
@@ -67,7 +67,7 @@ This trait provides 3 methods to your job: `__construct`, `failed` and `middlewa
 If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
 so this package still work as intended.
 
-For example: if you need to change the constructor of your job, copy the code from `Junges\TrackableJobs\Traits\Trackable` to your new constructor:
+For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Traits\Trackable` and alias the `__construct` with some other name, for example:
 
 ```php
 <?php
@@ -85,17 +85,13 @@ use Junges\TrackableJobs\Models\TrackedJob;
 
 class ProcessPodcastJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable {
+        __construct as __baseConstruct;
+    }
 
     public function __construct(Podcast $podcast)
     {
-         $this->model = $podcast;
-         
-         $this->trackedJob = TrackedJob::create([
-            'trackable_id'   => $this->model->id,
-            'trackable_type' => get_class($this->model),
-            'name'           => class_basename(static::class),
-         ]);
+         $this->baseContruct($podcast);
          
          // Add your code here.
     }
@@ -106,6 +102,7 @@ class ProcessPodcastJob implements ShouldQueue
     }
 }
 ```
+It can be done with any method you want to change.
 
 This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the 
 `started_at` and `finished_at` timestamps for each tracked job.

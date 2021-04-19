@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+## 1.1.2 (2021-04-19)
+- Update docs in README.md
+
 ## 1.1.1 (2021-04-16)
 - Fixes #6
 
