@@ -6,6 +6,7 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Spatie\TestTime\TestTime;
 
 class TrackedJobTest extends TestCase
 {
@@ -49,5 +50,18 @@ class TrackedJobTest extends TestCase
         $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
 
         $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
+    }
+
+    public function test_it_can_get_the_correct_job_duration()
+    {
+        TestTime::freeze();
+
+        $job = new TestJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame('1h', TrackedJob::first()->duration);
     }
 }

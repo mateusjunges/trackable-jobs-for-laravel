@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":238:{a:2:{s:7:"defects";a:1:{s:83:"Junges\TrackableJobs\Tests\TrackedJobTest::test_it_can_get_the_correct_job_duration";i:5;}s:5:"times";a:1:{s:83:"Junges\TrackableJobs\Tests\TrackedJobTest::test_it_can_get_the_correct_job_duration";d:0.076;}}}
