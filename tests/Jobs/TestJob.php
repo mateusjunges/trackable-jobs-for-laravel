@@ -21,6 +21,7 @@ class TestJob implements ShouldQueue
     public function handle()
     {
         TestTime::addHour();
+
         return 'This is a test job';
     }
 }
