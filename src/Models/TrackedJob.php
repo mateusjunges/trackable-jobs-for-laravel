@@ -85,4 +85,32 @@ class TrackedJob extends Model implements TrackableJobContract
             'output' => $output,
         ]);
     }
+
+    /**
+     * Whether the job has already started.
+     *
+     * @return bool
+     */
+    public function hasStarted(): bool
+    {
+        return !empty($this->started_at);
+    }
+
+    /**
+     * Get the duration of the job, in human diff.
+     *
+     * @throws \Exception
+     *
+     * @return string
+     */
+    public function getDurationAttribute(): string
+    {
+        if (!$this->hasStarted()) {
+            return '';
+        }
+
+        return ($this->finished_at ?? now())
+            ->diffAsCarbonInterval($this->started_at)
+            ->forHumans(['short' => true]);
+    }
 }

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Traits\Trackable;
+use Spatie\TestTime\TestTime;
 
 class TestJob implements ShouldQueue
 {
@@ -19,6 +20,8 @@ class TestJob implements ShouldQueue
 
     public function handle()
     {
+        TestTime::addHour();
+
         return 'This is a test job';
     }
 }
