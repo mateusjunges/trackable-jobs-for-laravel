@@ -22,7 +22,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertDatabaseCount('tracked_jobs', 1);
+        $this->assertCount(1, TrackedJob::all());
 
         $this->assertTrue(
             (bool) preg_match(
@@ -44,7 +44,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
         app(Dispatcher::class)->dispatch($job);
 
-        $this->assertDatabaseCount('tracked_jobs', 1);
+        $this->assertCount(1, TrackedJob::all());
 
         $job = TrackedJob::first();
 
@@ -63,7 +63,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertDatabaseCount('tracked_jobs', 1);
+        $this->assertCount(1, TrackedJob::all());
 
         $uuid = TrackedJob::first()->uuid;
 
@@ -80,7 +80,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertDatabaseCount('tracked_jobs', 1);
+        $this->assertCount(1, TrackedJob::all());
 
         $uuid = TrackedJob::first()->uuid;
 
