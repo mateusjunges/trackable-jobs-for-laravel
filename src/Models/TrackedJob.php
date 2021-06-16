@@ -5,6 +5,7 @@ namespace Junges\TrackableJobs\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Junges\TrackableJobs\Concerns\HasUuid;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
 /***
@@ -14,14 +15,18 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
  */
 class TrackedJob extends Model implements TrackableJobContract
 {
+    use HasUuid;
+
     const STATUS_QUEUED = 'queued';
     const STATUS_STARTED = 'started';
     const STATUS_FINISHED = 'finished';
     const STATUS_FAILED = 'failed';
 
     protected $table = '';
+    protected $keyType = 'int';
 
     protected $fillable = [
+        'uuid',
         'trackable_id',
         'trackable_type',
         'name',
@@ -40,11 +45,17 @@ class TrackedJob extends Model implements TrackableJobContract
     {
         parent::__construct($attributes);
         $this->setTable(config('trackable-jobs.tables.tracked_jobs', 'tracked_jobs'));
+
+        if (config('trackable-jobs.using_uuid', false)) {
+            $this->setKeyType('string');
+            $this->primaryKey = 'uuid';
+            $this->setIncrementing(false);
+        }
     }
 
     public function trackable(): MorphTo
     {
-        return $this->morphTo('trackable');
+        return $this->morphTo('trackable', 'trackable_type', 'trackable_id');
     }
 
     public function markAsStarted(): bool

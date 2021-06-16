@@ -3,6 +3,7 @@
 namespace Junges\TrackableJobs\Tests\Traits;
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobFailed;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
@@ -11,6 +12,15 @@ use Junges\TrackableJobs\Tests\TestCase;
 
 class TrackableTraitTest extends TestCase
 {
+    use RefreshDatabase;
+
+    public function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $app['config']->set('trackable-jobs.using_uuid', false);
+    }
+
     public function test_job_executes_without_fail()
     {
         $job = new TestJob($this->user);

@@ -1,2 +1,4 @@
 /vendor/
 .idea/
+tests/reports/*
+composer.lock

@@ -3,6 +3,9 @@
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
@@ -10,6 +13,15 @@ use Spatie\TestTime\TestTime;
 
 class TrackedJobTest extends TestCase
 {
+    use RefreshDatabase;
+
+    public function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $app['config']->set('trackable-jobs.using_uuid', false);
+    }
+
     public function test_it_can_get_the_correct_morph()
     {
         $job = new TestJob($this->user);
@@ -63,5 +75,12 @@ class TrackedJobTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $this->assertSame('1h', TrackedJob::first()->duration);
+    }
+
+    public function test_it_throws_exception_if_finding_by_uuid()
+    {
+        $this->expectException(UuidNotConfiguredException::class);
+
+        TrackedJob::findByUuid(Str::uuid());
     }
 }
