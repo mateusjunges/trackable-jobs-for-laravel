@@ -7,6 +7,6 @@ return [
      */
     'tables' => [
         'tracked_jobs' => 'tracked_jobs',
-        'using_uuid' => false,
     ],
+    'using_uuid' => false,
 ];
