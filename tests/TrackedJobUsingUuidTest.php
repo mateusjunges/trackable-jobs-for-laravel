@@ -6,7 +6,6 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
-use Junges\TrackableJobs\Traits\Trackable;
 use Spatie\TestTime\TestTime;
 
 class TrackedJobUsingUuidTest extends TestCase
