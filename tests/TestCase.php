@@ -9,6 +9,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 class TestCase extends Orchestra
 {
     public $user;
+    public $userUuid;
 
     public function setUp(): void
     {
@@ -17,6 +18,7 @@ class TestCase extends Orchestra
         $this->configureDatabase($this->app);
 
         $this->user = User::first();
+        $this->userUuid = UserUuid::first();
 
         (new TrackableJobsServiceProvider($this->app))->boot();
     }
@@ -31,6 +33,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('trackable-jobs.using_uuid', true);
         $app['config']->set('database.connections.sqlite', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
@@ -49,6 +52,12 @@ class TestCase extends Orchestra
             $table->string('email');
         });
 
+        $app['db']->connection()->getSchemaBuilder()->create('test_users_uuid', function (Blueprint $table) {
+            $table->uuid('uuid')->primary();
+            $table->string('name');
+            $table->string('email');
+        });
+
         $app['db']->connection()->getSchemaBuilder()->create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('queue')->index();
@@ -59,13 +68,14 @@ class TestCase extends Orchestra
             $table->unsignedInteger('created_at');
         });
 
-        include_once __DIR__.'/../database/migrations/2021_04_16_005274_laravel_trackable_create_tracked_jobs_table.php';
-
-        (new \LaravelTrackableCreateTrackedJobsTable())->up();
-
         User::create([
             'name'  => 'Test user',
             'email' => 'test@test.com',
+        ]);
+
+        UserUuid::create([
+            'name'  => 'Test user uuid',
+            'email' => 'test@test-uuid.com',
         ]);
     }
 }

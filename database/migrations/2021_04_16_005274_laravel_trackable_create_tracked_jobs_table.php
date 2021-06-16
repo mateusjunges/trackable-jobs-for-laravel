@@ -18,10 +18,10 @@ class LaravelTrackableCreateTrackedJobsTable extends Migration
     public function up()
     {
         Schema::create($this->table_name, function (Blueprint $table) {
-            $this->usingUuid 
-                ? $table->uuid('uuid') 
+            $this->usingUuid
+                ? $table->uuid('uuid')->primary()
                 : $table->id();
-            $table->unsignedBigInteger('trackable_id')->index();
+            $table->string('trackable_id')->index();
             $table->string('trackable_type')->index();
             $table->string('name');
             $table->string('status')->default('queued');
