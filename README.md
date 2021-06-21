@@ -92,7 +92,7 @@ class ProcessPodcastJob implements ShouldQueue
 
     public function __construct(Podcast $podcast)
     {
-         $this->baseContruct($podcast);
+         $this->__baseConstruct($podcast);
          
          // Add your code here.
     }
