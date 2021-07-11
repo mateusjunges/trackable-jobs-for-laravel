@@ -9,7 +9,6 @@ use Throwable;
 
 /**
  * Class TrackedJobMiddleware.
- * @package Junges\TrackableJobs\Jobs\Middleware
  */
 class TrackedJobMiddleware
 {

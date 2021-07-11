@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Interface TrackableJobContract.
- * @package Junges\TrackableJobs\Contracts
  */
 interface TrackableJobContract
 {

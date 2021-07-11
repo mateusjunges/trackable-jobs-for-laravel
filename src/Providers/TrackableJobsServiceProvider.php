@@ -20,10 +20,10 @@ class TrackableJobsServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config/trackable-jobs.php' => config_path('trackable-jobs.php'),
+            __DIR__.'/../../config/trackable-jobs.php' => config_path('trackable-jobs.php'),
         ], 'trackable-jobs-config');
 
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
     /**

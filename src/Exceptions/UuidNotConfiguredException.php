@@ -8,7 +8,6 @@ use Exception;
 
 /**
  * Class UuidNotConfiguredException.
- * @package Junges\TrackableJobs\Exceptions
  */
 class UuidNotConfiguredException extends Exception
 {

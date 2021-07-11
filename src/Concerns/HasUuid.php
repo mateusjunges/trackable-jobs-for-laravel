@@ -30,6 +30,7 @@ trait HasUuid
      * @param string $uuid
      *
      * @return Model|null
+     *
      * @throws UuidNotConfiguredException
      */
     public static function findByUuid(string $uuid): ?Model
