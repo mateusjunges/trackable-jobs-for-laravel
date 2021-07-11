@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests\Jobs;
 
 use Exception;
@@ -10,15 +12,18 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Traits\Trackable;
 
+/**
+ * Class FailingJob
+ * @package Junges\TrackableJobs\Tests\Jobs
+ */
 class FailingJob implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Trackable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
-    public function handle()
+    /**
+     * @return void
+     */
+    public function handle(): void
     {
         $this->fail(new Exception('This job failed.'));
     }

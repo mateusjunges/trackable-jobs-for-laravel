@@ -1,16 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Junges\TrackableJobs\Providers\TrackableJobsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
+/**
+ * Class TestCase
+ * @package Junges\TrackableJobs\Tests
+ */
 class TestCase extends Orchestra
 {
     public $user;
     public $userUuid;
 
+    /**
+     * @return void
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -23,14 +32,21 @@ class TestCase extends Orchestra
         (new TrackableJobsServiceProvider($this->app))->boot();
     }
 
-    public function getPackageProviders($app)
+    /**
+     * @param $app
+     * @return array
+     */
+    public function getPackageProviders($app): array
     {
         return [
             TrackableJobsServiceProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    /**
+     * @return void
+     */
+    public function getEnvironmentSetUp($app): void
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('trackable-jobs.using_uuid', true);
@@ -41,7 +57,11 @@ class TestCase extends Orchestra
         ]);
     }
 
-    private function configureDatabase($app)
+    /**
+     * @param $app
+     * @return void
+     */
+    private function configureDatabase($app): void
     {
         $app['config']->set('trackable-jobs.tables.tracked_jobs', 'tracked_jobs');
         $app['config']->set('queue.default', 'database');

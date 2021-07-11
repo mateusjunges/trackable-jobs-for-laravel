@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -11,18 +13,28 @@ use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
 use Spatie\TestTime\TestTime;
 
+/**
+ * Class TrackedJobTest
+ * @package Junges\TrackableJobs\Tests
+ */
 class TrackedJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function getEnvironmentSetUp($app)
+    /**
+     * @param $app
+     */
+    public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
         $app['config']->set('trackable-jobs.using_uuid', false);
     }
 
-    public function test_it_can_get_the_correct_morph()
+    /**
+     * @return void
+     */
+    public function test_it_can_get_the_correct_morph(): void
     {
         $job = new TestJob($this->user);
 
@@ -43,7 +55,10 @@ class TrackedJobTest extends TestCase
         $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
     }
 
-    public function test_it_can_get_the_correct_morph_for_failed_jobs()
+    /**
+     * @return void
+     */
+    public function test_it_can_get_the_correct_morph_for_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 
@@ -64,7 +79,10 @@ class TrackedJobTest extends TestCase
         $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
     }
 
-    public function test_it_can_get_the_correct_job_duration()
+    /**
+     * @return void
+     */
+    public function test_it_can_get_the_correct_job_duration(): void
     {
         TestTime::freeze();
 
@@ -77,10 +95,14 @@ class TrackedJobTest extends TestCase
         $this->assertSame('1h', TrackedJob::first()->duration);
     }
 
-    public function test_it_throws_exception_if_finding_by_uuid()
+    /**
+     * @return void
+     * @throws UuidNotConfiguredException
+     */
+    public function test_it_throws_exception_if_finding_by_uuid(): void
     {
         $this->expectException(UuidNotConfiguredException::class);
 
-        TrackedJob::findByUuid(Str::uuid());
+        TrackedJob::findByUuid(Str::uuid()->toString());
     }
 }

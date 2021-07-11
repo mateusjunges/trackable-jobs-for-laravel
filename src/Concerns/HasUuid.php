@@ -1,29 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 
+/**
+ * Trait HasUuid
+ * @package Junges\TrackableJobs\Concerns
+ */
 trait HasUuid
 {
-    public static function bootHasUuid()
+    /**
+     * @return void
+     */
+    public static function bootHasUuid(): void
     {
         static::creating(function (Model $model) {
-            if (!config('trackable-jobs.using_uuid', false)) {
-                return;
+            if (config('trackable-jobs.using_uuid', false)) {
+                $model->uuid = (string) Str::uuid();
             }
-            $model->uuid = (string) Str::uuid();
         });
     }
 
     /**
      * @param string $uuid
-     *
-     * @throws UuidNotConfiguredException
-     *
      * @return Model|null
+     * @throws UuidNotConfiguredException
      */
     public static function findByUuid(string $uuid): ?Model
     {

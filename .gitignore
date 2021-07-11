@@ -2,3 +2,4 @@
 .idea/
 tests/reports/*
 composer.lock
+.phpunit.result.cache

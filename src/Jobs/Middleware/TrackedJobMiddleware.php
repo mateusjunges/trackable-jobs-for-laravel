@@ -1,12 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Jobs\Middleware;
 
+use Junges\TrackableJobs\Traits\Trackable;
 use Throwable;
 
+/**
+ * Class TrackedJobMiddleware
+ * @package Junges\TrackableJobs\Jobs\Middleware
+ */
 class TrackedJobMiddleware
 {
-    public function handle($job, $next)
+    /**
+     * @param Trackable $job
+     * @param $next
+     * @return void
+     */
+    public function handle($job, $next): void
     {
         $job->trackedJob->markAsStarted();
 

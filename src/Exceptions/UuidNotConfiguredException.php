@@ -1,8 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Exceptions;
 
-class UuidNotConfiguredException extends TrackableJobsException
+use Exception;
+
+/**
+ * Class UuidNotConfiguredException
+ * @package Junges\TrackableJobs\Exceptions
+ */
+class UuidNotConfiguredException extends Exception
 {
     public static function youAreNotUsingUuid(): self
     {

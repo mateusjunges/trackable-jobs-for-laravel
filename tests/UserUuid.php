@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -32,13 +34,25 @@ class UserUuid extends Authenticatable
      */
     protected $table = 'test_users_uuid';
 
+    /**
+     * @var string
+     */
     protected $keyType = 'string';
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var string
+     */
     protected $primaryKey = 'uuid';
 
-    public static function boot()
+    /**
+     * @return void
+     */
+    public static function boot(): void
     {
         parent::boot();
 
@@ -47,6 +61,10 @@ class UserUuid extends Authenticatable
         });
     }
 
+    /**
+     * @param string $uuid
+     * @return UserUuid|null
+     */
     public static function findByUuid(string $uuid): ?UserUuid
     {
         return static::where('uuid', $uuid)->first();

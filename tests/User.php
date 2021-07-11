@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *

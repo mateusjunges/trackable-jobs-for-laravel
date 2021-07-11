@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Models;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -22,9 +24,23 @@ class TrackedJob extends Model implements TrackableJobContract
     const STATUS_FINISHED = 'finished';
     const STATUS_FAILED = 'failed';
 
+    /**
+     * Getting from config.
+     *
+     * @var string
+     */
     protected $table = '';
+
+    /**
+     * Getting from config.
+     *
+     * @var string
+     */
     protected $keyType = 'int';
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'uuid',
         'trackable_id',
@@ -36,11 +52,18 @@ class TrackedJob extends Model implements TrackableJobContract
         'finished_at',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'started_at'  => 'datetime',
         'finished_at' => 'datetime',
     ];
 
+    /**
+     * TrackedJob constructor.
+     * @param array $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -53,11 +76,17 @@ class TrackedJob extends Model implements TrackableJobContract
         }
     }
 
+    /**
+     * @return MorphTo
+     */
     public function trackable(): MorphTo
     {
         return $this->morphTo('trackable', 'trackable_type', 'trackable_id');
     }
 
+    /**
+     * @return bool
+     */
     public function markAsStarted(): bool
     {
         return $this->update([
@@ -66,6 +95,10 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * @param string|null $message
+     * @return bool
+     */
     public function markAsFinished(string $message = null): bool
     {
         if ($message) {
@@ -78,6 +111,10 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * @param string|null $exception
+     * @return bool
+     */
     public function markAsFailed(string $exception = null): bool
     {
         if ($exception) {
@@ -90,6 +127,10 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * @param string $output
+     * @return bool
+     */
     public function setOutput(string $output): bool
     {
         return $this->update([

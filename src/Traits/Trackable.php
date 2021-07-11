@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Traits;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,12 +9,26 @@ use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
+/**
+ * Trait Trackable
+ * @package Junges\TrackableJobs\Traits
+ */
 trait Trackable
 {
+    /**
+     * @var Model|null
+     */
     public ?Model $model;
 
+    /**
+     * @var TrackedJob|Model
+     */
     public TrackedJob $trackedJob;
 
+    /**
+     * Trackable constructor.
+     * @param $model
+     */
     public function __construct($model)
     {
         $this->model = $model;
@@ -24,12 +40,19 @@ trait Trackable
         ]);
     }
 
-    public function middleware()
+    /**
+     * @return TrackedJobMiddleware[]
+     */
+    public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
     }
 
-    public function failed(Throwable $exception)
+    /**
+     * @param Throwable $exception
+     * @return void
+     */
+    public function failed(Throwable $exception): void
     {
         $message = $exception->getMessage();
 

@@ -1,14 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
 use Junges\TrackableJobs\Models\TrackedJob;
 
+/**
+ * Class TrackableJobsServiceProvider
+ * @package Junges\TrackableJobs\Providers
+ */
 class TrackableJobsServiceProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * @return void
+     */
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../../config/trackable-jobs.php' => config_path('trackable-jobs.php'),
@@ -17,7 +26,10 @@ class TrackableJobsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
-    public function register()
+    /**
+     * @return void
+     */
+    public function register(): void
     {
         $this->app->bind(TrackableJobContract::class, TrackedJob::class);
     }

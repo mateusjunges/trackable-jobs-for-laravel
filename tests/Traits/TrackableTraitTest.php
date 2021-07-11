@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests\Traits;
 
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -10,18 +12,29 @@ use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
 use Junges\TrackableJobs\Tests\TestCase;
 
+/**
+ * Class TrackableTraitTest
+ * @package Junges\TrackableJobs\Tests\Traits
+ */
 class TrackableTraitTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function getEnvironmentSetUp($app)
+    /**
+     * @param $app
+     * @return void
+     */
+    public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
         $app['config']->set('trackable-jobs.using_uuid', false);
     }
 
-    public function test_job_executes_without_fail()
+    /**
+     * @return void
+     */
+    public function test_job_executes_without_fail(): void
     {
         $job = new TestJob($this->user);
 
@@ -38,7 +51,10 @@ class TrackableTraitTest extends TestCase
         $this->doesntExpectEvents(JobFailed::class);
     }
 
-    public function test_it_tracks_failed_jobs()
+    /**
+     * @return void
+     */
+    public function test_it_tracks_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 
@@ -53,7 +69,10 @@ class TrackableTraitTest extends TestCase
         $this->assertSame(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
     }
 
-    public function test_it_can_get_the_job_output()
+    /**
+     * @return void
+     */
+    public function test_it_can_get_the_job_output(): void
     {
         $job = new TestJob($this->user);
 
@@ -70,7 +89,10 @@ class TrackableTraitTest extends TestCase
         $this->assertSame('This is a test job', TrackedJob::first()->output);
     }
 
-    public function test_it_can_get_the_output_for_failed_jobs()
+    /**
+     * @return void
+     */
+    public function test_it_can_get_the_output_for_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 

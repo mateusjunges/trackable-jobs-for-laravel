@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Junges\TrackableJobs\Tests\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -10,15 +12,18 @@ use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Traits\Trackable;
 use Spatie\TestTime\TestTime;
 
+/**
+ * Class TestJob
+ * @package Junges\TrackableJobs\Tests\Jobs
+ */
 class TestJob implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Trackable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
-    public function handle()
+    /**
+     * @return string
+     */
+    public function handle(): string
     {
         TestTime::addHour();
 
