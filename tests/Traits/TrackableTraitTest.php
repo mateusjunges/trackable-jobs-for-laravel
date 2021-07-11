@@ -13,7 +13,7 @@ use Junges\TrackableJobs\Tests\Jobs\Trackable\TestJob;
 use Junges\TrackableJobs\Tests\TestCase;
 
 /**
- * Class TrackableTraitTest
+ * Class TrackableTraitTest.
  * @package Junges\TrackableJobs\Tests\Traits
  */
 class TrackableTraitTest extends TestCase

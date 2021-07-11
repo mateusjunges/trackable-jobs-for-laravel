@@ -6,12 +6,13 @@ namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\Trackable\TestJob;
 use Spatie\TestTime\TestTime;
 
 /**
- * Class TrackedJobUsingUuidTest
+ * Class TrackedJobUsingUuidTest.
  * @package Junges\TrackableJobs\Tests
  */
 class TrackedJobUsingUuidTest extends TestCase
@@ -34,7 +35,7 @@ class TrackedJobUsingUuidTest extends TestCase
         $this->assertCount(1, TrackedJob::all());
 
         $this->assertTrue(
-            (bool)preg_match(
+            (bool) preg_match(
                 '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i',
                 TrackedJob::first()->uuid
             )
@@ -67,6 +68,8 @@ class TrackedJobUsingUuidTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws UuidNotConfiguredException
      */
     public function test_it_can_find_tracked_jobs_by_uuid(): void
     {
@@ -87,6 +90,8 @@ class TrackedJobUsingUuidTest extends TestCase
 
     /**
      * @return void
+     *
+     * @throws UuidNotConfiguredException
      */
     public function test_it_stores_the_model_uuid(): void
     {

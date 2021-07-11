@@ -13,12 +13,17 @@ use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Traits\TrackableAuto;
 
 /**
- * Class FailingJob
+ * Class FailingJob.
  * @package Junges\TrackableJobs\Tests\Jobs\TrackableAuto
  */
 class FailingJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, TrackableAuto;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use TrackableAuto;
+
 
     /**
      * @return void

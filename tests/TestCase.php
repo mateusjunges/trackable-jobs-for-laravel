@@ -45,6 +45,8 @@ class TestCase extends Orchestra
     }
 
     /**
+     * @param $app
+     *
      * @return void
      */
     public function getEnvironmentSetUp($app): void
@@ -52,9 +54,9 @@ class TestCase extends Orchestra
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('trackable-jobs.using_uuid', true);
         $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
+            'driver'    => 'sqlite',
+            'database'  => ':memory:',
+            'prefix'    => '',
         ]);
     }
 
@@ -91,12 +93,12 @@ class TestCase extends Orchestra
         });
 
         User::create([
-            'name' => 'Test user',
+            'name'  => 'Test user',
             'email' => 'test@test.com',
         ]);
 
         UserUuid::create([
-            'name' => 'Test user uuid',
+            'name'  => 'Test user uuid',
             'email' => 'test@test-uuid.com',
         ]);
     }

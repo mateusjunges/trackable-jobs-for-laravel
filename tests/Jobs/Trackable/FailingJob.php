@@ -10,15 +10,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Traits\Trackable;
 
 /**
- * Class FailingJob
+ * Class FailingJob.
  * @package Junges\TrackableJobs\Tests\Jobs\Trackable
  */
 class FailingJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use TrackableAuto;
 
     /**
      * @return void

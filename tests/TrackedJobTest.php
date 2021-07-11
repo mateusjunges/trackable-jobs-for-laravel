@@ -14,7 +14,7 @@ use Junges\TrackableJobs\Tests\Jobs\Trackable\TestJob;
 use Spatie\TestTime\TestTime;
 
 /**
- * Class TrackedJobTest
+ * Class TrackedJobTest.
  * @package Junges\TrackableJobs\Tests
  */
 class TrackedJobTest extends TestCase
@@ -97,6 +97,7 @@ class TrackedJobTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws UuidNotConfiguredException
      */
     public function test_it_throws_exception_if_finding_by_uuid(): void
