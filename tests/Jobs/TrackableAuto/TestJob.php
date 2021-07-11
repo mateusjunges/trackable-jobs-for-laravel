@@ -14,7 +14,6 @@ use Spatie\TestTime\TestTime;
 
 /**
  * Class TestJob.
- * @package Junges\TrackableJobs\Tests\Jobs\TrackableAuto
  */
 class TestJob implements ShouldQueue
 {
@@ -23,7 +22,6 @@ class TestJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
     use TrackableAuto;
-
 
     /**
      * @return string

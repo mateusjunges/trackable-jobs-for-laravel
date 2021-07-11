@@ -22,7 +22,6 @@ class TestJobUuid implements ShouldQueue
     use SerializesModels;
     use TrackableAuto;
 
-
     /**
      * @return string
      */

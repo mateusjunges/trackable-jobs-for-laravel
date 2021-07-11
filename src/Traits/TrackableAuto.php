@@ -10,8 +10,7 @@ use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
 /**
- * Trait TrackableWithoutModel
- * @package Junges\TrackableJobs\Traits
+ * Trait TrackableWithoutModel.
  */
 trait TrackableAuto
 {

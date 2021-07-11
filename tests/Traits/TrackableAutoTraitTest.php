@@ -14,7 +14,6 @@ use Junges\TrackableJobs\Tests\TestCase;
 
 /**
  * Class TrackableTraitTest.
- * @package Junges\TrackableJobs\Tests\Traits
  */
 class TrackableAutoTraitTest extends TestCase
 {

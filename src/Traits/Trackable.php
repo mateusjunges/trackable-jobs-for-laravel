@@ -11,8 +11,7 @@ use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
 /**
- * Trait Trackable
- * @package Junges\TrackableJobs\Traits
+ * Trait Trackable.
  */
 trait Trackable
 {

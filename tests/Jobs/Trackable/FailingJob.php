@@ -13,7 +13,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class FailingJob.
- * @package Junges\TrackableJobs\Tests\Jobs\Trackable
  */
 class FailingJob implements ShouldQueue
 {

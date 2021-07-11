@@ -23,7 +23,6 @@ class FailingJob implements ShouldQueue
     use SerializesModels;
     use TrackableAuto;
 
-
     /**
      * @return void
      */

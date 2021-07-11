@@ -9,8 +9,7 @@ use Junges\TrackableJobs\Providers\TrackableJobsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
- * Class TestCase
- * @package Junges\TrackableJobs\Tests
+ * Class TestCase.
  */
 class TestCase extends Orchestra
 {
