@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace Junges\TrackableJobs\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use InvalidArgumentException;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
 
 /**
- * Trait Trackable
+ * Trait TrackableWithoutModel
  * @package Junges\TrackableJobs\Traits
  */
-trait Trackable
+trait TrackableAuto
 {
-    /**
-     * @var Model|null
-     */
-    public ?Model $model;
-
     /**
      * @var TrackedJob|Model
      */
@@ -28,18 +22,12 @@ trait Trackable
 
     /**
      * Trackable constructor.
-     * @param mixed ...$args
      */
-    public function __construct(...$args)
+    public function __construct()
     {
-        if (!count($args) || !$args[0] instanceof Model) {
-            throw new InvalidArgumentException('When you use trackable. You must pass first arg model');
-        }
-
-        $this->model = $args[0];
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->model->id ?? $this->model->uuid,
-            'trackable_type' => get_class($this->model),
+            'trackable_id' => $this->getTrackableId(),
+            'trackable_type' => static::class,
             'name' => class_basename(static::class),
         ]);
     }
@@ -58,8 +46,19 @@ trait Trackable
      */
     public function failed(Throwable $exception): void
     {
-        $message = $exception->getMessage();
+        $this->trackedJob->markAsFailed(
+            $exception->getMessage()
+        );
+    }
 
-        $this->trackedJob->markAsFailed($message);
+    /**
+     * Return id for trackable.
+     *
+     * @return int
+     */
+    protected function getTrackableId(): int
+    {
+        // Note: null + 1 = 1
+        return TrackedJob::max('trackable_id') + 1;
     }
 }

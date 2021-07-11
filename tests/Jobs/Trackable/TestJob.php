@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Junges\TrackableJobs\Tests\Jobs;
+namespace Junges\TrackableJobs\Tests\Jobs\Trackable;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +14,7 @@ use Spatie\TestTime\TestTime;
 
 /**
  * Class TestJob
- * @package Junges\TrackableJobs\Tests\Jobs
+ * @package Junges\TrackableJobs\Tests\Jobs\Trackable
  */
 class TestJob implements ShouldQueue
 {

@@ -2,31 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Junges\TrackableJobs\Tests\Jobs;
+namespace Junges\TrackableJobs\Tests\Jobs\Trackable;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Traits\Trackable;
-use Spatie\TestTime\TestTime;
 
 /**
- * Class TestJobUuid
- * @package Junges\TrackableJobs\Tests\Jobs
+ * Class FailingJob
+ * @package Junges\TrackableJobs\Tests\Jobs\Trackable
  */
-class TestJobUuid implements ShouldQueue
+class FailingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     /**
-     * @return string
+     * @return void
      */
-    public function handle(): string
+    public function handle(): void
     {
-        TestTime::addHour();
-
-        return 'This is a test job';
+        $this->fail(new Exception('This job failed.'));
     }
 }

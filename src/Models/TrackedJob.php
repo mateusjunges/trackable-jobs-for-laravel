@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Junges\TrackableJobs\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -56,7 +57,7 @@ class TrackedJob extends Model implements TrackableJobContract
      * @var string[]
      */
     protected $casts = [
-        'started_at'  => 'datetime',
+        'started_at' => 'datetime',
         'finished_at' => 'datetime',
     ];
 
@@ -90,7 +91,7 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsStarted(): bool
     {
         return $this->update([
-            'status'     => static::STATUS_STARTED,
+            'status' => static::STATUS_STARTED,
             'started_at' => now(),
         ]);
     }
@@ -106,7 +107,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status'      => static::STATUS_FINISHED,
+            'status' => static::STATUS_FINISHED,
             'finished_at' => now(),
         ]);
     }
@@ -122,7 +123,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status'      => static::STATUS_FAILED,
+            'status' => static::STATUS_FAILED,
             'finished_at' => now(),
         ]);
     }
@@ -151,9 +152,8 @@ class TrackedJob extends Model implements TrackableJobContract
     /**
      * Get the duration of the job, in human diff.
      *
-     * @throws \Exception
-     *
      * @return string
+     * @throws Exception
      */
     public function getDurationAttribute(): string
     {

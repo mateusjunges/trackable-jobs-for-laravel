@@ -1,6 +1,6 @@
 name: Continuous Integration
 
-on: ['push', 'pull_request']
+on: [ 'push', 'pull_request' ]
 
 jobs:
   ci:
@@ -8,9 +8,9 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.4]
-        laravel: [8.*, 7.*]
-        dependency-version: [prefer-stable, prefer-lowest]
+        php: [ 7.4 ]
+        laravel: [ 8.*, 7.* ]
+        dependency-version: [ prefer-stable, prefer-lowest ]
         include:
           - laravel: 8.*
             testbench: 6.*
@@ -21,27 +21,27 @@ jobs:
 
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      with:
-        path: ~/.composer/cache/files
-        key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: mbstring, zip
-        tools: prestissimo
-        coverage: pcov
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, zip
+          tools: prestissimo
+          coverage: pcov
 
-    - name: Install Composer dependencies
-      run: |
-        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
+      - name: Install Composer dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
 
-    - name: PHPUnit Testing
-      run: vendor/bin/phpunit tests
+      - name: PHPUnit Testing
+        run: vendor/bin/phpunit tests

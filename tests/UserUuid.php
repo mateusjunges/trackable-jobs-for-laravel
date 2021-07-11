@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 class UserUuid extends Authenticatable
 {
     use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -57,7 +58,7 @@ class UserUuid extends Authenticatable
         parent::boot();
 
         static::creating(function (UserUuid $model) {
-            $model->uuid = (string) Str::uuid();
+            $model->uuid = (string)Str::uuid();
         });
     }
 

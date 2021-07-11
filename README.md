@@ -1,4 +1,5 @@
 # Trackable Jobs For Laravel
+
 ![Trackable jobs for laravel](https://banners.beyondco.de/Laravel%20Trackable%20Jobs.png?theme=light&packageManager=composer+require&packageName=mateusjunges%2Flaravel-trackable-jobs&pattern=architect&style=style_1&description=This+package+allows+you+to+track+your+laravel+jobs%21&md=1&showWatermark=1&fontSize=100px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mateusjunges/laravel-trackable-jobs.svg?style=flat)](https://packagist.org/packages/mateusjunges/laravel-trackable-jobs)
@@ -16,6 +17,7 @@ Using this package, you can easily persist the output and the status of any job 
     - [2.2 Tracking job chains](#tracking-job-chains)
     - [2.3 Extending the `TrackedJob` model](#extending-the-trackedjob-model)
     - [2.4 Using UUIDs](#using-uuids)
+    - [2.5 Tracking without model](#tracking-without-model)
 - [3. Tests](#tests)
 - [4. Contributing](#contributing)
 - [5. Changelog](#changelog)
@@ -23,7 +25,9 @@ Using this package, you can easily persist the output and the status of any job 
 - [7. License](#license)
 
 # Installation
+
 To install this package, use composer:
+
 ```bash
 composer require mateusjunges/laravel-trackable-jobs
 ```
@@ -37,9 +41,12 @@ php artisan vendor:publish --tag=trackable-jobs-config
 Run `php artisan migrate` to migrate the table needed by this package and now you are good to go!
 
 # Usage
+
 ## Tracking jobs
-To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Traits\Trackable` trait in the job you want to track.
-For example, let's say you want to track the status of `ProcessPodcastJob`, just add the `Trackable` trait into your job:
+
+To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Traits\Trackable` trait in the job you want
+to track. For example, let's say you want to track the status of `ProcessPodcastJob`, just add the `Trackable` trait
+into your job:
 
 ```php
 <?php
@@ -64,11 +71,12 @@ class ProcessPodcastJob implements ShouldQueue
 }
 ```
 
-This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public property to the job class.
-If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
-so this package still work as intended.
+This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public
+property to the job class. If you want to override any of the methods, you must copy and paste (because you can't
+use `parent` for traits) the content of each one inside your class, so this package still work as intended.
 
-For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Traits\Trackable` and alias the `__construct` with some other name, for example:
+For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Traits\Trackable`
+and alias the `__construct` with some other name, for example:
 
 ```php
 <?php
@@ -103,9 +111,11 @@ class ProcessPodcastJob implements ShouldQueue
     }
 }
 ```
+
 It can be done with any method you want to change.
 
-This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the 
+This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it
+stores the
 `started_at` and `finished_at` timestamps for each tracked job.
 
 To use it, you just need to pass any model to your Job constructor:
@@ -114,7 +124,8 @@ To use it, you just need to pass any model to your Job constructor:
 dispatch(new ProcessPodcastJob($podcast));
 ```
 
-Once this trait is added to your job, your job progress will be persisted to the database. You can configure the table name by publishing this package configuration file:
+Once this trait is added to your job, your job progress will be persisted to the database. You can configure the table
+name by publishing this package configuration file:
 
 ```shell
 php artisan vendor:publish --tag=trackable-jobs-config
@@ -126,19 +137,39 @@ This command will create a new config file in `config/trackable-jobs.php`, with 
 <?php
 
 return [
+
     /*
-     | The table where the tracked jobs will be stored.
-     | By default, it's called 'tracked_jobs'.
-     */
+    |--------------------------------------------------------------------------
+    | Tables
+    |--------------------------------------------------------------------------
+    |
+    | The table where the tracked jobs will be stored.
+    | By default, it's called 'tracked_jobs'.
+    |
+    */
+
     'tables' => [
         'tracked_jobs' => 'tracked_jobs',
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Using uuid
+    |--------------------------------------------------------------------------
+    |
+    | When true trackable will use uuid.
+    |
+    */
+
     'using_uuid' => false,
+
 ];
+
 ```
 
-
 ## Tracking job chains
+
 Laravel supports job chaining out of the box:
 
 ```php
@@ -151,10 +182,9 @@ Bus::dispatchChain([
 
 It's a nice, fluent way of saying "Run this jobs sequentially, one after the previous one is complete.".
 
-If you have a task which takes some steps to be completed, you can track the job chain used to do that and know the 
-status for each job. 
-If you are releasing a new podcast, for example, and it has to be optimized, compressed and released, you can track 
-this steps by adding a `steps` relationship to your `Podcast` model:
+If you have a task which takes some steps to be completed, you can track the job chain used to do that and know the
+status for each job. If you are releasing a new podcast, for example, and it has to be optimized, compressed and
+released, you can track this steps by adding a `steps` relationship to your `Podcast` model:
 
 ```php
 public function steps()
@@ -170,7 +200,11 @@ $steps = Podcast::find($id)->steps()->get();
 ```
 
 ## Persist the output of a job
-To persist the output of your job to the database, you only need to return something from your job. By default, if your job throws an exception, the output stored in the database will be the message of the given exception. If your job finishes successfully, you don't have to return anything, but you can store it's output by just returning something after the job is done. For example:
+
+To persist the output of your job to the database, you only need to return something from your job. By default, if your
+job throws an exception, the output stored in the database will be the message of the given exception. If your job
+finishes successfully, you don't have to return anything, but you can store it's output by just returning something
+after the job is done. For example:
 
 ```php
 public function handle()
@@ -180,13 +214,14 @@ public function handle()
     return "Job finished successfully";
 }
 ```
+
 The string `Job finished successfully` will be stored as the output of this job.
 
-
 ## Extending the `TrackedJob` model.
-If, for some reason, you need to use your own custom model to the TrackedJob table, you can just create a new model
-and extend the existing `Junges\TrackableJobs\Models\TrackedJob::class`.
-Then, you need to bind the `Junges\TrackableJobs\Contracts\TrackableJobContract` to the new model, within your `AppServiceProvider`:
+
+If, for some reason, you need to use your own custom model to the TrackedJob table, you can just create a new model and
+extend the existing `Junges\TrackableJobs\Models\TrackedJob::class`. Then, you need to bind
+the `Junges\TrackableJobs\Contracts\TrackableJobContract` to the new model, within your `AppServiceProvider`:
 
 ```php
 <?php
@@ -222,28 +257,44 @@ class AppServiceProvider extends ServiceProvider
 ```
 
 ## Using UUIDs
-To use UUIDs with this package, the only additional configuration you need to do is change the `using_uuid` to `true`, in `config/trackable-jobs.php`.
-Then it will automatically start using UUID's to store the tracked jobs and, if the model related to the tracked job
-also uses UUID, it will be stored to the database in the `trackable_id` field.
+
+To use UUIDs with this package, the only additional configuration you need to do is change the `using_uuid` to `true`,
+in `config/trackable-jobs.php`. Then it will automatically start using UUID's to store the tracked jobs and, if the
+model related to the tracked job also uses UUID, it will be stored to the database in the `trackable_id` field.
+    
+# Tracking without model
+
+By default, Trackable need the model for tracking job. If your job work without model, it can be problem. In new version
+package we can new trait TrackableAuto. It's trait like Trackable, but don't need model for tracking.
 
 # Tests
+
 Run `composer test` to test this package.
 
 # Contributing
-Thank you for consider contributing for the Laravel Trackable Jobs package! The contribution guide can
-be found [here][contributing].
+
+Thank you for consider contributing for the Laravel Trackable Jobs package! The contribution guide can be
+found [here][contributing].
 
 # Changelog
+
 Please see the [changelog][changelog] for more information about the changes on this package.
 
 # Credits
+
 - [All contributors][contributors]
 
 # License
-The laravel trackable jobs is open-sourced software licensed under the terms of [MIT License][mit]. Please see the [license file][license] for more information.
+
+The laravel trackable jobs is open-sourced software licensed under the terms of [MIT License][mit]. Please see
+the [license file][license] for more information.
 
 [contributing]: CONTRIBUTING.md
+
 [changelog]: CHANGELOG.md
+
 [mit]: https://opensource.org/licenses/MIT
+
 [license]: LICENSE
+
 [contributors]: https://github.com/mateusjunges/trackable-jobs-for-laravel/graphs/contributors

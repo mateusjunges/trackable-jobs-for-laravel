@@ -9,8 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
-use Junges\TrackableJobs\Tests\Jobs\FailingJob;
-use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\Trackable\FailingJob;
+use Junges\TrackableJobs\Tests\Jobs\Trackable\TestJob;
 use Spatie\TestTime\TestTime;
 
 /**

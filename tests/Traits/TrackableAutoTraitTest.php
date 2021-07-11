@@ -8,15 +8,15 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobFailed;
 use Junges\TrackableJobs\Models\TrackedJob;
-use Junges\TrackableJobs\Tests\Jobs\Trackable\FailingJob;
-use Junges\TrackableJobs\Tests\Jobs\Trackable\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\TrackableAuto\FailingJob;
+use Junges\TrackableJobs\Tests\Jobs\TrackableAuto\TestJob;
 use Junges\TrackableJobs\Tests\TestCase;
 
 /**
  * Class TrackableTraitTest
  * @package Junges\TrackableJobs\Tests\Traits
  */
-class TrackableTraitTest extends TestCase
+class TrackableAutoTraitTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -27,7 +27,6 @@ class TrackableTraitTest extends TestCase
     public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
-
         $app['config']->set('trackable-jobs.using_uuid', false);
     }
 
@@ -36,7 +35,7 @@ class TrackableTraitTest extends TestCase
      */
     public function test_job_executes_without_fail(): void
     {
-        $job = new TestJob($this->user);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -56,7 +55,7 @@ class TrackableTraitTest extends TestCase
      */
     public function test_it_tracks_failed_jobs(): void
     {
-        $job = new FailingJob($this->user);
+        $job = new FailingJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -74,7 +73,7 @@ class TrackableTraitTest extends TestCase
      */
     public function test_it_can_get_the_job_output(): void
     {
-        $job = new TestJob($this->user);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -94,7 +93,7 @@ class TrackableTraitTest extends TestCase
      */
     public function test_it_can_get_the_output_for_failed_jobs(): void
     {
-        $job = new FailingJob($this->user);
+        $job = new FailingJob();
 
         app(Dispatcher::class)->dispatch($job);
 
