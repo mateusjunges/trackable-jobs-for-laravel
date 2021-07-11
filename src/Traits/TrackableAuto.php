@@ -26,9 +26,9 @@ trait TrackableAuto
     public function __construct()
     {
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->getTrackableId(),
+            'trackable_id'   => $this->getTrackableId(),
             'trackable_type' => static::class,
-            'name' => class_basename(static::class),
+            'name'           => class_basename(static::class),
         ]);
     }
 

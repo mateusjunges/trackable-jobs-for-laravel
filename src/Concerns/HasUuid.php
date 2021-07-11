@@ -10,7 +10,6 @@ use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 
 /**
  * Trait HasUuid.
- * @package Junges\TrackableJobs\Concerns
  */
 trait HasUuid
 {
@@ -29,9 +28,9 @@ trait HasUuid
     /**
      * @param string $uuid
      *
-     * @return Model|null
-     *
      * @throws UuidNotConfiguredException
+     *
+     * @return Model|null
      */
     public static function findByUuid(string $uuid): ?Model
     {

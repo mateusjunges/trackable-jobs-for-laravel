@@ -156,9 +156,9 @@ class TrackedJob extends Model implements TrackableJobContract
     /**
      * Get the duration of the job, in human diff.
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public function getDurationAttribute(): string
     {

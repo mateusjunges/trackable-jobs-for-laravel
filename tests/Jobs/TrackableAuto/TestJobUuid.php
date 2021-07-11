@@ -14,7 +14,6 @@ use Spatie\TestTime\TestTime;
 
 /**
  * Class TestJobUuid.
- * @package Junges\TrackableJobs\Tests\Jobs\TrackableAuto
  */
 class TestJobUuid implements ShouldQueue
 {

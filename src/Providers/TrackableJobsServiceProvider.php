@@ -9,8 +9,7 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 use Junges\TrackableJobs\Models\TrackedJob;
 
 /**
- * Class TrackableJobsServiceProvider
- * @package Junges\TrackableJobs\Providers
+ * Class TrackableJobsServiceProvider.
  */
 class TrackableJobsServiceProvider extends ServiceProvider
 {

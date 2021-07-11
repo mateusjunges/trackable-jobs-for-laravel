@@ -14,7 +14,6 @@ use Junges\TrackableJobs\Traits\TrackableAuto;
 
 /**
  * Class FailingJob.
- * @package Junges\TrackableJobs\Tests\Jobs\TrackableAuto
  */
 class FailingJob implements ShouldQueue
 {
