@@ -58,7 +58,7 @@ class UserUuid extends Authenticatable
         parent::boot();
 
         static::creating(function (UserUuid $model) {
-            $model->uuid = (string)Str::uuid();
+            $model->uuid = (string) Str::uuid();
         });
     }
 

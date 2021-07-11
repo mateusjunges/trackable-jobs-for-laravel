@@ -21,7 +21,7 @@ trait HasUuid
     {
         static::creating(function (Model $model) {
             if (config('trackable-jobs.using_uuid', false)) {
-                $model->uuid = (string)Str::uuid();
+                $model->uuid = (string) Str::uuid();
             }
         });
     }
