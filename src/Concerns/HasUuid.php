@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 
 /**
- * Trait HasUuid
+ * Trait HasUuid.
  * @package Junges\TrackableJobs\Concerns
  */
 trait HasUuid
@@ -28,6 +28,7 @@ trait HasUuid
 
     /**
      * @param string $uuid
+     *
      * @return Model|null
      * @throws UuidNotConfiguredException
      */

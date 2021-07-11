@@ -28,6 +28,7 @@ trait Trackable
 
     /**
      * Trackable constructor.
+     *
      * @param mixed ...$args
      */
     public function __construct(...$args)
@@ -54,6 +55,7 @@ trait Trackable
 
     /**
      * @param Throwable $exception
+     *
      * @return void
      */
     public function failed(Throwable $exception): void

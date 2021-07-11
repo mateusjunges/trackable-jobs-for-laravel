@@ -7,7 +7,7 @@ namespace Junges\TrackableJobs\Contracts;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * Interface TrackableJobContract
+ * Interface TrackableJobContract.
  * @package Junges\TrackableJobs\Contracts
  */
 interface TrackableJobContract
@@ -24,18 +24,21 @@ interface TrackableJobContract
 
     /**
      * @param string|null $message
+     *
      * @return bool
      */
     public function markAsFinished(string $message = null): bool;
 
     /**
      * @param string|null $exception
+     *
      * @return bool
      */
     public function markAsFailed(string $exception = null): bool;
 
     /**
      * @param string $output
+     *
      * @return bool
      */
     public function setOutput(string $output): bool;

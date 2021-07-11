@@ -8,7 +8,7 @@ use Junges\TrackableJobs\Traits\Trackable;
 use Throwable;
 
 /**
- * Class TrackedJobMiddleware
+ * Class TrackedJobMiddleware.
  * @package Junges\TrackableJobs\Jobs\Middleware
  */
 class TrackedJobMiddleware
@@ -16,6 +16,7 @@ class TrackedJobMiddleware
     /**
      * @param Trackable $job
      * @param $next
+     *
      * @return void
      */
     public function handle($job, $next): void

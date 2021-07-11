@@ -64,6 +64,7 @@ class UserUuid extends Authenticatable
 
     /**
      * @param string $uuid
+     *
      * @return UserUuid|null
      */
     public static function findByUuid(string $uuid): ?UserUuid

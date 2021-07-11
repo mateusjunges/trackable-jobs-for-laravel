@@ -1,44 +1,44 @@
 {
-    "name": "mateusjunges/laravel-trackable-jobs",
-    "description": "This package allows you to track your jobs",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Mateus Junges",
-            "email": "mateus@junges.dev",
-            "role": "Software Engineer"
-        }
-    ],
-    "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/support": "^7.0|^8.0",
-        "illuminate/queue": "^7.0|^8.0",
-        "illuminate/database": "^7.0|^8.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^5.0|^6.0",
-        "phpunit/phpunit": "^8.0|^9.0",
-        "spatie/test-time": "^1.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Junges\\TrackableJobs\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Junges\\TrackableJobs\\Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Junges\\TrackableJobs\\Providers\\TrackableJobsServiceProvider"
-            ]
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit tests"
+  "name": "mateusjunges/laravel-trackable-jobs",
+  "description": "This package allows you to track your jobs",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mateus Junges",
+      "email": "mateus@junges.dev",
+      "role": "Software Engineer"
     }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "illuminate/support": "^7.0|^8.0",
+    "illuminate/queue": "^7.0|^8.0",
+    "illuminate/database": "^7.0|^8.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^5.0|^6.0",
+    "phpunit/phpunit": "^8.0|^9.0",
+    "spatie/test-time": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Junges\\TrackableJobs\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Junges\\TrackableJobs\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Junges\\TrackableJobs\\Providers\\TrackableJobsServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit tests"
+  }
 }

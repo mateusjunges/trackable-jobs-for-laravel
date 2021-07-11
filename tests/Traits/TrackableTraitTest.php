@@ -22,6 +22,7 @@ class TrackableTraitTest extends TestCase
 
     /**
      * @param $app
+     *
      * @return void
      */
     public function getEnvironmentSetUp($app): void

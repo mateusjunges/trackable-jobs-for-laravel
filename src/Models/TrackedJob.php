@@ -63,6 +63,7 @@ class TrackedJob extends Model implements TrackableJobContract
 
     /**
      * TrackedJob constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = [])
@@ -98,6 +99,7 @@ class TrackedJob extends Model implements TrackableJobContract
 
     /**
      * @param string|null $message
+     *
      * @return bool
      */
     public function markAsFinished(string $message = null): bool
@@ -114,6 +116,7 @@ class TrackedJob extends Model implements TrackableJobContract
 
     /**
      * @param string|null $exception
+     *
      * @return bool
      */
     public function markAsFailed(string $exception = null): bool
@@ -130,6 +133,7 @@ class TrackedJob extends Model implements TrackableJobContract
 
     /**
      * @param string $output
+     *
      * @return bool
      */
     public function setOutput(string $output): bool

@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class LaravelTrackableCreateTrackedJobsTable
+ * Class LaravelTrackableCreateTrackedJobsTable.
  */
 class LaravelTrackableCreateTrackedJobsTable extends Migration
 {

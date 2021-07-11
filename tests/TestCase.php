@@ -34,6 +34,7 @@ class TestCase extends Orchestra
 
     /**
      * @param $app
+     *
      * @return array
      */
     public function getPackageProviders($app): array
@@ -59,6 +60,7 @@ class TestCase extends Orchestra
 
     /**
      * @param $app
+     *
      * @return void
      */
     private function configureDatabase($app): void

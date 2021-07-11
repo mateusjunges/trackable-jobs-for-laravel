@@ -7,7 +7,7 @@ namespace Junges\TrackableJobs\Exceptions;
 use Exception;
 
 /**
- * Class UuidNotConfiguredException
+ * Class UuidNotConfiguredException.
  * @package Junges\TrackableJobs\Exceptions
  */
 class UuidNotConfiguredException extends Exception
