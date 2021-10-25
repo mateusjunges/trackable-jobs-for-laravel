@@ -18,9 +18,9 @@ trait Trackable
         $this->model = $model;
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id'   => $this->model->id ?? $this->model->uuid,
+            'trackable_id' => $this->model->id ?? $this->model->uuid,
             'trackable_type' => get_class($this->model),
-            'name'           => class_basename(static::class),
+            'name' => class_basename(static::class),
         ]);
     }
 

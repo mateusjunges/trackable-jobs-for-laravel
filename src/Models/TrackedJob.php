@@ -37,7 +37,7 @@ class TrackedJob extends Model implements TrackableJobContract
     ];
 
     protected $casts = [
-        'started_at'  => 'datetime',
+        'started_at' => 'datetime',
         'finished_at' => 'datetime',
     ];
 
@@ -61,7 +61,7 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsStarted(): bool
     {
         return $this->update([
-            'status'     => static::STATUS_STARTED,
+            'status' => static::STATUS_STARTED,
             'started_at' => now(),
         ]);
     }
@@ -73,7 +73,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status'      => static::STATUS_FINISHED,
+            'status' => static::STATUS_FINISHED,
             'finished_at' => now(),
         ]);
     }
@@ -85,7 +85,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status'      => static::STATUS_FAILED,
+            'status' => static::STATUS_FAILED,
             'finished_at' => now(),
         ]);
     }
@@ -104,7 +104,7 @@ class TrackedJob extends Model implements TrackableJobContract
      */
     public function hasStarted(): bool
     {
-        return !empty($this->started_at);
+        return ! empty($this->started_at);
     }
 
     /**
@@ -116,7 +116,7 @@ class TrackedJob extends Model implements TrackableJobContract
      */
     public function getDurationAttribute(): string
     {
-        if (!$this->hasStarted()) {
+        if (! $this->hasStarted()) {
             return '';
         }
 
