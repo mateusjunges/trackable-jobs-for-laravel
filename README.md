@@ -34,7 +34,7 @@ You can publish the configuration file with this command:
 php artisan vendor:publish --tag=trackable-jobs-config
 ```
 
-Run `php artisan migrate` to migrate the table needed by this package and now you are good to go!
+Run `php artisan migrate` to migrate the table needed by this package, and now you are good to go!
 
 # Usage
 ## Tracking jobs
