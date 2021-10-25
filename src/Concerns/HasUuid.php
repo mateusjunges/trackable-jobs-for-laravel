@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 
+/**
+ * @mixin Model
+ */
 trait HasUuid
 {
     public static function bootHasUuid()

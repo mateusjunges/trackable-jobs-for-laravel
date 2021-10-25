@@ -3,7 +3,7 @@
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
 ## 1.2.0 (2021-06-16)
-- Added support for UUID's [#19](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/19)
+- Added support for UUID's ([#19](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/19))
 
 ## 1.1.3 (2021-04-22)
 - Added two new methods to be used with the package UI.

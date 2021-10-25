@@ -38,7 +38,7 @@ Run `php artisan migrate` to migrate the table needed by this package and now yo
 
 # Usage
 ## Tracking jobs
-To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Traits\Trackable` trait in the job you want to track.
+To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Concerns\Trackable` trait in the job you want to track.
 For example, let's say you want to track the status of `ProcessPodcastJob`, just add the `Trackable` trait into your job:
 
 ```php
@@ -51,7 +51,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Traits\Trackable;
+use Junges\TrackableJobs\Concerns\Trackable;
 
 class ProcessPodcastJob implements ShouldQueue
 {
@@ -68,7 +68,7 @@ This trait provides 3 methods to your job: `__construct`, `failed` and `middlewa
 If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
 so this package still work as intended.
 
-For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Traits\Trackable` and alias the `__construct` with some other name, for example:
+For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Concerns\Trackable` and alias the `__construct` with some other name, for example:
 
 ```php
 <?php
@@ -80,7 +80,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Traits\Trackable;
+use Junges\TrackableJobs\Concerns\Trackable;
 use App\Models\Podcast;
 use Junges\TrackableJobs\Models\TrackedJob;
 

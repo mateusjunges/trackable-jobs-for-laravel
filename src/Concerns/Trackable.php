@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\TrackableJobs\Traits;
+namespace Junges\TrackableJobs\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
@@ -24,7 +24,7 @@ trait Trackable
         ]);
     }
 
-    public function middleware()
+    public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
     }
