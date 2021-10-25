@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 
+/**
+ * @mixin Model
+ */
 trait HasUuid
 {
     public static function bootHasUuid()
     {
         static::creating(function (Model $model) {
-            if (!config('trackable-jobs.using_uuid', false)) {
+            if (! config('trackable-jobs.using_uuid', false)) {
                 return;
             }
             $model->uuid = (string) Str::uuid();
@@ -27,7 +30,7 @@ trait HasUuid
      */
     public static function findByUuid(string $uuid): ?Model
     {
-        if (!config('trackable-jobs.using_uuid', false)) {
+        if (! config('trackable-jobs.using_uuid', false)) {
             throw UuidNotConfiguredException::youAreNotUsingUuid();
         }
 

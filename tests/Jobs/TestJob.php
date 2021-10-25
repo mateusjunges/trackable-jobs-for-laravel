@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Traits\Trackable;
+use Junges\TrackableJobs\Concerns\Trackable;
 use Spatie\TestTime\TestTime;
 
 class TestJob implements ShouldQueue

@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\TrackableJobs\Traits;
+namespace Junges\TrackableJobs\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
@@ -18,13 +18,13 @@ trait Trackable
         $this->model = $model;
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id'   => $this->model->id ?? $this->model->uuid,
+            'trackable_id' => $this->model->id ?? $this->model->uuid,
             'trackable_type' => get_class($this->model),
-            'name'           => class_basename(static::class),
+            'name' => class_basename(static::class),
         ]);
     }
 
-    public function middleware()
+    public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
     }
