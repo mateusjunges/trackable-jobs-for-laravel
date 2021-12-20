@@ -11,6 +11,9 @@ jobs:
         php: [7.4, 8.0]
         laravel: [8.*]
         dependency-version: [prefer-stable, prefer-lowest]
+        include:
+          - laravel: 8.*
+            testbench: 6.23
 
     name: CI - PHP ${{ matrix.php }}  - Laravel ${{ matrix.laravel }} - Testbench ${{ matrix.testbench }} (${{ matrix.dependency-version }})
 
@@ -29,7 +32,7 @@ jobs:
 
     - name: Install Composer dependencies
       run: |
-        composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
 
     - name: PHPUnit Testing
