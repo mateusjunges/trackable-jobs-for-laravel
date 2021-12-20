@@ -24,7 +24,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Junges\\TrackableJobs\\": "src/"
+            "Junges\\TrackableJobs\\": "src/",
+            "Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {

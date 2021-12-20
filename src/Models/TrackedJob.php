@@ -2,8 +2,12 @@
 
 namespace Junges\TrackableJobs\Models;
 
+use Database\Factories\TrackedJobFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Junges\TrackableJobs\Concerns\HasUuid;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
@@ -11,30 +15,38 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 /***
  * Class TrackedJob
  * @package Junges\TrackableJobs\Models
+ * @property string|null uuid
+ * @property int trackable_id
+ * @property string trackable_type
+ * @property string name
+ * @property string status
+ * @property string|null output
+ * @property \Carbon\Carbon|null started_at
+ * @property \Carbon\Carbon|null finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
 {
+    use HasFactory;
     use HasUuid;
+    use Prunable;
 
     const STATUS_QUEUED = 'queued';
     const STATUS_STARTED = 'started';
     const STATUS_FINISHED = 'finished';
     const STATUS_FAILED = 'failed';
 
+    const STATUSES = [
+        self::STATUS_QUEUED,
+        self::STATUS_STARTED,
+        self::STATUS_FINISHED,
+        self::STATUS_FAILED
+    ];
+
     protected $table = '';
     protected $keyType = 'int';
 
-    protected $fillable = [
-        'uuid',
-        'trackable_id',
-        'trackable_type',
-        'name',
-        'status',
-        'output',
-        'started_at',
-        'finished_at',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'started_at' => 'datetime',
@@ -51,6 +63,11 @@ class TrackedJob extends Model implements TrackableJobContract
             $this->primaryKey = 'uuid';
             $this->setIncrementing(false);
         }
+    }
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
     }
 
     public function trackable(): MorphTo
@@ -123,5 +140,10 @@ class TrackedJob extends Model implements TrackableJobContract
         return ($this->finished_at ?? now())
             ->diffAsCarbonInterval($this->started_at)
             ->forHumans(['short' => true]);
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return new TrackedJobFactory();
     }
 }
