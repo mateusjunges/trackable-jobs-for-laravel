@@ -77,6 +77,10 @@ class TrackedJob extends Model implements TrackableJobContract
 
     public function prunable()
     {
+        if (is_null(config('trackable-jobs.prunable_after'))) {
+            return static::query()->where('id', null);
+        }
+
         return static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
     }
 

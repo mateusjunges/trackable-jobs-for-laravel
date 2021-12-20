@@ -104,4 +104,17 @@ class TrackedJobTest extends TestCase
 
         $this->assertEquals(20, (new TrackedJob)->prunable()->count());
     }
+
+    public function test_it_will_not_prune_if_prunable_config_is_null()
+    {
+        TestTime::freeze();
+
+        TrackedJob::factory(10)->create();
+
+        TestTime::addDays(40);
+
+        config()->set('trackable-jobs.prunable_after');
+
+        $this->assertEquals(0, (new TrackedJob)->prunable()->count());
+    }
 }
