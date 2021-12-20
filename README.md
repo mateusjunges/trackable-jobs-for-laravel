@@ -16,6 +16,7 @@ Using this package, you can easily persist the output and the status of any job 
     - [2.2 Tracking job chains](#tracking-job-chains)
     - [2.3 Extending the `TrackedJob` model](#extending-the-trackedjob-model)
     - [2.4 Using UUIDs](#using-uuids)
+    - [2.5 Pruning old tracked jobs]()
 - [3. Tests](#tests)
 - [4. Contributing](#contributing)
 - [5. Changelog](#changelog)
@@ -225,6 +226,11 @@ class AppServiceProvider extends ServiceProvider
 To use UUIDs with this package, the only additional configuration you need to do is change the `using_uuid` to `true`, in `config/trackable-jobs.php`.
 Then it will automatically start using UUID's to store the tracked jobs and, if the model related to the tracked job
 also uses UUID, it will be stored to the database in the `trackable_id` field.
+
+## Pruning old Tracked Jobs
+If you want to prune your old tracked jobs, you can set the `prunable_after` config with the amount of days you want your models
+to keep in your database. For example, if you set the `prunable_after` to `30`, all models older than 30 days 
+will be deleted.
 
 # Tests
 Run `composer test` to test this package.
