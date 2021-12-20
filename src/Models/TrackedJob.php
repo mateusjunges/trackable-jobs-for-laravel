@@ -47,7 +47,16 @@ class TrackedJob extends Model implements TrackableJobContract
     protected $table = '';
     protected $keyType = 'int';
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'uuid',
+        'trackable_id',
+        'trackable_type',
+        'name',
+        'status',
+        'output',
+        'started_at',
+        'finished_at',
+    ];
 
     protected $casts = [
         'started_at' => 'datetime',
