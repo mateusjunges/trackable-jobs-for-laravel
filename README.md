@@ -16,7 +16,7 @@ Using this package, you can easily persist the output and the status of any job 
     - [2.2 Tracking job chains](#tracking-job-chains)
     - [2.3 Extending the `TrackedJob` model](#extending-the-trackedjob-model)
     - [2.4 Using UUIDs](#using-uuids)
-    - [2.5 Pruning old tracked jobs]()
+    - [2.5 Pruning old tracked jobs](#pruning-old-tracked-jobs)
 - [3. Tests](#tests)
 - [4. Contributing](#contributing)
 - [5. Changelog](#changelog)
