@@ -40,7 +40,7 @@ class TrackedJob extends Model implements TrackableJobContract
         self::STATUS_QUEUED,
         self::STATUS_STARTED,
         self::STATUS_FINISHED,
-        self::STATUS_FAILED
+        self::STATUS_FAILED,
     ];
 
     protected $table = '';
