@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Junges\TrackableJobs\Concerns\HasUuid;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
-/***
+/**
  * Class TrackedJob
+ *
  * @package Junges\TrackableJobs\Models
  * @property string|null uuid
  * @property int trackable_id
