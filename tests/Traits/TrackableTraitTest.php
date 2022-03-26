@@ -5,6 +5,7 @@ namespace Junges\TrackableJobs\Tests\Traits;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Event;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
@@ -13,6 +14,7 @@ use Junges\TrackableJobs\Tests\TestCase;
 class TrackableTraitTest extends TestCase
 {
     use RefreshDatabase;
+    // use MocksApplicationServices;
 
     public function getEnvironmentSetUp($app)
     {
@@ -23,6 +25,7 @@ class TrackableTraitTest extends TestCase
 
     public function test_job_executes_without_fail()
     {
+        Event::fake();
         $job = new TestJob($this->user);
 
         app(Dispatcher::class)->dispatch($job);
@@ -35,7 +38,7 @@ class TrackableTraitTest extends TestCase
 
         $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
 
-        $this->doesntExpectEvents(JobFailed::class);
+        Event::assertNotDispatched(JobFailed::class);
     }
 
     public function test_it_tracks_failed_jobs()
