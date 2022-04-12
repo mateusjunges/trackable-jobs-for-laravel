@@ -2,6 +2,10 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v1.5.0 (2022-04-12)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.4.0...v1.5.0)
+### Added
+- Added support for Laravel v9.x
+
 ### [1.4.0 (2021-12-20)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.3.0...1.4.0)
 ### Added
 - Added `prunable` trait to base `TrackedJob` model
