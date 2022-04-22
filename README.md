@@ -7,6 +7,12 @@
 [![Check & fix styling](https://github.com/mateusjunges/trackable-jobs-for-laravel/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/mateusjunges/trackable-jobs-for-laravel/actions/workflows/php-cs-fixer.yml)
 [![Continuous Integration](https://github.com/mateusjunges/trackable-jobs-for-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/mateusjunges/trackable-jobs-for-laravel/actions/workflows/run-tests.yml)
 
+# Buy me a coffee!
+If you think this package helped you in any way, you can <a href="https://www.paypal.com/donate/?hosted_button_id=ECFBTKP2NVKEW" target="_blank">buy me a coffee!</a>
+
+![art/donation-qr-code.png](art/donation-qr-code.png)
+
+# Documentation
 This package allows you to track your laravel jobs!
 Using this package, you can easily persist the output and the status of any job in your application.
 
