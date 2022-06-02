@@ -2,6 +2,10 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v1.5.1 (2022-06-02)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.5.0...v1.5.1)
+### Fixed
+- Fixed Trackable to respect custom morph map [(#29)](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/29)
+
 ### [v1.5.0 (2022-04-12)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.4.0...v1.5.0)
 ### Added
 - Added support for Laravel v9.x
