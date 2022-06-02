@@ -3,6 +3,7 @@
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
@@ -35,6 +36,33 @@ class TrackedJobTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
+
+        $this->assertIsObject(TrackedJob::first()->trackable);
+
+        $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
+
+        $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
+    }
+
+    public function test_it_can_get_the_correct_morph_when_using_custom_morph_map()
+    {
+        Relation::morphMap([
+            'test-morph' => User::class,
+        ]);
+
+        $job = new TestJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
+
+        $this->assertSame('test-morph', TrackedJob::first()->trackable_type);
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
