@@ -47,7 +47,7 @@ class TrackedJobTest extends TestCase
     public function test_it_can_get_the_correct_morph_when_using_custom_morph_map()
     {
         Relation::morphMap([
-            'test-morph' => User::class
+            'test-morph' => User::class,
         ]);
 
         $job = new TestJob($this->user);
