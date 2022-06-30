@@ -10,15 +10,15 @@ use Throwable;
 
 trait Trackable
 {
-    public ?Model $model;
+    public ?Model $trackable = null;
 
     public ?TrackedJob $trackedJob = null;
 
     private bool $shouldBeTracked = true;
 
-    public function __construct($model, bool $shouldBeTracked = true)
+    public function __construct(Model $trackable = null, bool $shouldBeTracked = true)
     {
-        $this->model = $model;
+        $this->trackable = $trackable;
 
         if (! $shouldBeTracked) {
             $this->shouldBeTracked = false;
@@ -27,8 +27,8 @@ trait Trackable
         }
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->model->id ?? $this->model->uuid,
-            'trackable_type' => $this->model->getMorphClass(),
+            'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
+            'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
             'name' => class_basename(static::class),
         ]);
     }
@@ -68,7 +68,14 @@ trait Trackable
      */
     public static function dispatchWithoutTracking(...$arguments): PendingDispatch
     {
-        $arguments = [...$arguments, false];
+        if (! count($arguments)) {
+            $arguments = [null, false];
+        } else {
+            $arguments = [
+                ...$arguments,
+                false
+            ];
+        }
 
         $job = new static(...$arguments);
 

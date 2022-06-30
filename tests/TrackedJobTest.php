@@ -10,6 +10,7 @@ use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\TestJobWithoutModel;
 use Spatie\TestTime\TestTime;
 
 class TrackedJobTest extends TestCase
@@ -170,5 +171,29 @@ class TrackedJobTest extends TestCase
         $tracked = TrackedJob::first();
 
         $this->assertEquals('This is a test job', $tracked->output);
+    }
+
+    public function test_i_can_track_jobs_without_models()
+    {
+        TestJobWithoutModel::dispatchWithoutTracking();
+
+        $this->assertCount(0, TrackedJob::all());
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertCount(0, TrackedJob::all());
+
+        TestJobWithoutModel::dispatch();
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        /** @var TrackedJob $tracked */
+        $tracked = TrackedJob::first();
+
+        $this->assertEquals('This is a test job without models.', $tracked->output);
+
+
     }
 }
