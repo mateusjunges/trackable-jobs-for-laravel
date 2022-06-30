@@ -26,8 +26,6 @@ trait Trackable
             return;
         }
 
-        $this->shouldBeTracked = true;
-
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->model->id ?? $this->model->uuid,
             'trackable_type' => $this->model->getMorphClass(),
