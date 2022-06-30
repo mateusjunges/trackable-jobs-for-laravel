@@ -3,6 +3,7 @@
 namespace Junges\TrackableJobs\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Throwable;
@@ -11,11 +12,21 @@ trait Trackable
 {
     public ?Model $model;
 
-    public TrackedJob $trackedJob;
+    public ?TrackedJob $trackedJob = null;
 
-    public function __construct($model)
+    private bool $shouldBeTracked = true;
+
+    public function __construct($model, bool $shouldBeTracked = true)
     {
         $this->model = $model;
+
+        if (! $shouldBeTracked) {
+            $this->shouldBeTracked = false;
+
+            return;
+        }
+
+        $this->shouldBeTracked = true;
 
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->model->id ?? $this->model->uuid,
@@ -29,10 +40,35 @@ trait Trackable
         return [new TrackedJobMiddleware()];
     }
 
+    /**
+     * Determines whether the job should be tracked or not.
+     *
+     * @return bool
+     */
+    public function shouldBeTracked(): bool
+    {
+        return $this->shouldBeTracked;
+    }
+
     public function failed(Throwable $exception)
     {
         $message = $exception->getMessage();
 
         $this->trackedJob->markAsFailed($message);
+    }
+
+    /**
+     * Dispatches the job without tracking.
+     *
+     * @param ...$arguments
+     * @return \Illuminate\Foundation\Bus\PendingDispatch
+     */
+    public static function dispatchWithoutTracking(...$arguments): PendingDispatch
+    {
+        $arguments = [...$arguments, false];
+
+        $job = new static(...$arguments);
+
+        return new PendingDispatch($job);
     }
 }
