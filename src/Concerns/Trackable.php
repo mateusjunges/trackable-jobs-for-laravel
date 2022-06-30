@@ -73,7 +73,7 @@ trait Trackable
         } else {
             $arguments = [
                 ...$arguments,
-                false
+                false,
             ];
         }
 

@@ -193,7 +193,5 @@ class TrackedJobTest extends TestCase
         $tracked = TrackedJob::first();
 
         $this->assertEquals('This is a test job without models.', $tracked->output);
-
-
     }
 }
