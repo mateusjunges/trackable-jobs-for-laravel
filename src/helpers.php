@@ -2,8 +2,7 @@
 
 use Illuminate\Foundation\Bus\PendingDispatch;
 
-if (! function_exists('dispatchWithoutTracking'))
-{
+if (! function_exists('dispatchWithoutTracking')) {
     /**
      * @param  mixed  $job
      * @param ...$args
