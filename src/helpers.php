@@ -4,13 +4,24 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 
 if (! function_exists('dispatchWithoutTracking')) {
     /**
+     * Dispatch a trackable job without tracking it.
+     *
      * @param  mixed  $job
-     * @param ...$args
+     * @param ...$arguments
+     * @throws \ReflectionException
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    function dispatchWithoutTracking($job, ...$args): PendingDispatch
+    function dispatchWithoutTracking($job, ...$arguments): PendingDispatch
     {
-        $arguments = [...$args, false];
+        $parameters = (new ReflectionClass($job))->getConstructor()->getParameters();
+
+        if (count($parameters) === 1 && ! count($arguments)) {
+            $arguments = [false];
+        }
+
+        if (count($parameters) > 1 && count($arguments) === 1) {
+            $arguments = [...$arguments, false];
+        }
 
         if (is_string($job)) {
             $job = new $job(...$arguments);
