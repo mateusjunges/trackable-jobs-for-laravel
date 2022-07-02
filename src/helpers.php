@@ -5,12 +5,19 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 if (! function_exists('dispatchWithoutTracking')) {
     /**
      * @param  mixed  $job
-     * @param ...$args
+     * @param ...$arguments
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    function dispatchWithoutTracking($job, ...$args): PendingDispatch
+    function dispatchWithoutTracking($job, ...$arguments): PendingDispatch
     {
-        $arguments = [...$args, false];
+        if (! count($arguments)) {
+            $arguments = [null, false];
+        } else {
+            $arguments = [
+                ...$arguments,
+                false,
+            ];
+        }
 
         if (is_string($job)) {
             $job = new $job(...$arguments);
