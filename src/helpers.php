@@ -8,17 +8,19 @@ if (! function_exists('dispatchWithoutTracking')) {
      *
      * @param  mixed  $job
      * @param ...$arguments
+     * @throws \ReflectionException
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
     function dispatchWithoutTracking($job, ...$arguments): PendingDispatch
     {
-        if (! count($arguments)) {
-            $arguments = [null, false];
-        } else {
-            $arguments = [
-                ...$arguments,
-                false,
-            ];
+        $parameters = (new ReflectionClass($job))->getConstructor()->getParameters();
+
+        if (count($parameters) === 1 && ! count($arguments)) {
+            $arguments = [false];
+        }
+
+        if (count($parameters) > 1 && count($arguments) === 1) {
+            $arguments = [...$arguments, false];
         }
 
         if (is_string($job)) {

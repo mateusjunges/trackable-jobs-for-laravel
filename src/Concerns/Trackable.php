@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
+use ReflectionClass;
 use Throwable;
 
 trait Trackable
@@ -68,13 +69,14 @@ trait Trackable
      */
     public static function dispatchWithoutTracking(...$arguments): PendingDispatch
     {
-        if (! count($arguments)) {
-            $arguments = [null, false];
-        } else {
-            $arguments = [
-                ...$arguments,
-                false,
-            ];
+        $parameters = (new ReflectionClass(self::class))->getConstructor()->getParameters();
+
+        if (count($parameters) === 1 && ! count($arguments)) {
+            $arguments = [false];
+        }
+
+        if (count($parameters) > 1 && count($arguments) === 1) {
+            $arguments = [...$arguments, false];
         }
 
         $job = new static(...$arguments);

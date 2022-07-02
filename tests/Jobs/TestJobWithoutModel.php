@@ -21,9 +21,9 @@ class TestJobWithoutModel implements ShouldQueue
         __construct as __baseConstruct;
     }
 
-    public function __construct(Model $trackable = null, bool $shouldBeTracked = true)
+    public function __construct(bool $shouldBeTracked = true)
     {
-        $this->__baseConstruct($trackable, $shouldBeTracked);
+        $this->__baseConstruct(null, $shouldBeTracked);
     }
 
     public function handle()
