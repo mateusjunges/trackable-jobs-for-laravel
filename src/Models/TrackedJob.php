@@ -75,6 +75,11 @@ class TrackedJob extends Model implements TrackableJobContract
         }
     }
 
+    /**
+     * Determine which tracked jobs should be pruned.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Junges\TrackableJobs\Models\TrackedJob
+     */
     public function prunable()
     {
         if (is_null(config('trackable-jobs.prunable_after'))) {
@@ -84,11 +89,21 @@ class TrackedJob extends Model implements TrackableJobContract
         return static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
     }
 
+    /**
+     * Return the model related to the tracked job.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function trackable(): MorphTo
     {
         return $this->morphTo('trackable', 'trackable_type', 'trackable_id');
     }
 
+    /**
+     * Mark the job as started.
+     *
+     * @return bool
+     */
     public function markAsStarted(): bool
     {
         return $this->update([
@@ -97,6 +112,12 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * Mark the job as finished successfully.
+     *
+     * @param  string|null  $message
+     * @return bool
+     */
     public function markAsFinished(string $message = null): bool
     {
         if ($message) {
@@ -109,6 +130,12 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * Mark the job as finished with error.
+     *
+     * @param  string|null  $exception
+     * @return bool
+     */
     public function markAsFailed(string $exception = null): bool
     {
         if ($exception) {
@@ -121,6 +148,12 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    /**
+     * Saves the output of the job.
+     *
+     * @param  string  $output
+     * @return bool
+     */
     public function setOutput(string $output): bool
     {
         return $this->update([
