@@ -3,3 +3,4 @@
 tests/reports/*
 composer.lock
 .php-cs-fixer.cache
+.phpunit.result.cache

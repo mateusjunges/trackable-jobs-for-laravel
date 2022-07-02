@@ -9,6 +9,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 class TestCase extends Orchestra
 {
     public $user;
+    public $user2;
     public $userUuid;
 
     public function setUp(): void
@@ -16,9 +17,6 @@ class TestCase extends Orchestra
         parent::setUp();
 
         $this->configureDatabase($this->app);
-
-        $this->user = User::first();
-        $this->userUuid = UserUuid::first();
 
         (new TrackableJobsServiceProvider($this->app))->boot();
     }
@@ -73,9 +71,18 @@ class TestCase extends Orchestra
             'email' => 'test@test.com',
         ]);
 
+        User::create([
+            'name' => 'Test user 2',
+            'email' => 'test2@test.com',
+        ]);
+
         UserUuid::create([
             'name' => 'Test user uuid',
             'email' => 'test@test-uuid.com',
         ]);
+
+        $this->user = User::first();
+        $this->user2 = User::find(2);
+        $this->userUuid = UserUuid::first();
     }
 }

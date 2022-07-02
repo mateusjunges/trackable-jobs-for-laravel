@@ -26,7 +26,10 @@
         "psr-4": {
             "Junges\\TrackableJobs\\": "src/",
             "Database\\Factories\\": "database/factories/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -145,4 +145,30 @@ class TrackedJobTest extends TestCase
 
         $this->assertEquals(0, (new TrackedJob)->prunable()->count());
     }
+
+    public function test_i_can_disable_tracking()
+    {
+        TestJob::dispatchWithoutTracking($this->user, false);
+
+        $this->assertCount(0, TrackedJob::all());
+    }
+
+    public function test_i_can_dispatch_one_job_without_tracking_and_the_next_with_tracking()
+    {
+        TestJob::dispatchWithoutTracking(User::first());
+
+        $this->assertCount(0, TrackedJob::all());
+
+        TestJob::dispatch(User::find(2));
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        /** @var TrackedJob $tracked */
+        $tracked = TrackedJob::first();
+
+        $this->assertEquals('This is a test job', $tracked->output);
+    }
 }

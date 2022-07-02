@@ -8,6 +8,10 @@ class TrackedJobMiddleware
 {
     public function handle($job, $next)
     {
+        if (! $job->shouldBeTracked()) {
+            return $next($job);
+        }
+
         $job->trackedJob->markAsStarted();
 
         try {
