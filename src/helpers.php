@@ -4,6 +4,8 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 
 if (! function_exists('dispatchWithoutTracking')) {
     /**
+     * Dispatch a trackable job without tracking it.
+     *
      * @param  mixed  $job
      * @param ...$arguments
      * @return \Illuminate\Foundation\Bus\PendingDispatch
