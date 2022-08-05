@@ -33,12 +33,14 @@ class TrackedJob extends Model implements TrackableJobContract
     use Prunable;
 
     const STATUS_QUEUED = 'queued';
+    const STATUS_RETRYING = 'retrying';
     const STATUS_STARTED = 'started';
     const STATUS_FINISHED = 'finished';
     const STATUS_FAILED = 'failed';
 
     const STATUSES = [
         self::STATUS_QUEUED,
+        self::STATUS_RETRYING,
         self::STATUS_STARTED,
         self::STATUS_FINISHED,
         self::STATUS_FAILED,
@@ -94,6 +96,20 @@ class TrackedJob extends Model implements TrackableJobContract
         return $this->update([
             'status' => static::STATUS_STARTED,
             'started_at' => now(),
+        ]);
+    }
+
+    public function markAsQueued(): bool
+    {
+        return $this->update([
+            'status' => static::STATUS_QUEUED,
+        ]);
+    }
+
+    public function markAsRetrying(): bool
+    {
+        return $this->update([
+            'status' => static::STATUS_RETRYING,
         ]);
     }
 

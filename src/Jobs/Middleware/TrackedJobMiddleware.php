@@ -10,12 +10,14 @@ class TrackedJobMiddleware
     {
         $job->trackedJob->markAsStarted();
 
-        try {
-            $response = $next($job);
+        $response = $next($job);
 
+        if ($job->job->isReleased())
+        {
+            $job->trackedJob->markAsRetrying();
+        }
+        else {
             $job->trackedJob->markAsFinished($response);
-        } catch (Throwable $exception) {
-            $job->fail($exception);
         }
     }
 }
