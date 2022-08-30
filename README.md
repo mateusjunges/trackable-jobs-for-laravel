@@ -13,7 +13,11 @@ If you think this package helped you in any way, you can sponsor me on GitHub!
 [![Sponsor Me](art/sponsor.png)](https://github.com/sponsors/mateusjunges)
 
 # Documentation
-You can [find the documentations for this package here](https://junges.dev/documentation/trackable-jobs-for-laravel/v1.5/1-introduction)
+> **Note**
+>
+> You must temporarily access the documentation using the direct IP address. I'm upgrading my server to use Laravel Forge.
+
+You can [find the documentations for this package here](http://137.184.142.165/documentation/trackable-jobs-for-laravel/v1.5/1-introduction)
 
 # Tests
 Run `composer test` to test this package.
