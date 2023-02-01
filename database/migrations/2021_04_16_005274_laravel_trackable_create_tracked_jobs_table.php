@@ -21,8 +21,8 @@ class LaravelTrackableCreateTrackedJobsTable extends Migration
             $this->usingUuid
                 ? $table->uuid('uuid')->primary()
                 : $table->id();
-            $table->string('trackable_id')->index();
-            $table->string('trackable_type')->index();
+            $table->string('trackable_id')->index()->nullable();
+            $table->string('trackable_type')->index()->nullable();
             $table->string('name');
             $table->string('status')->default('queued');
             $table->longText('output')->nullable();
