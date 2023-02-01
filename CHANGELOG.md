@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.0...v1.6.1)
+- Use FQCN as TrackedJob `name` instead of class basename (Fixes [#40](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/40)) by @mateusjunges
+
 ### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.5.2...v1.6.0)
 - Add support for Laravel v10.x in [#41](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/41)
 - Drop support for laravel 8 in [86bf9df](https://github.com/mateusjunges/trackable-jobs-for-laravel/commit/86bf9df6a364ab247cdae059764fe62d5a72118b)
