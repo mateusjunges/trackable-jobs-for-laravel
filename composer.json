@@ -33,6 +33,7 @@
             "Junges\\TrackableJobs\\Tests\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
