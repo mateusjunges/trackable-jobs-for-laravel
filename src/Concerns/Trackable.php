@@ -20,16 +20,16 @@ trait Trackable
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->model->id ?? $this->model->uuid,
             'trackable_type' => $this->model->getMorphClass(),
-            'name' => class_basename(static::class),
+            'name' => static::class,
         ]);
-    }
+	}
 
     public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
     }
 
-    public function failed(Throwable $exception)
+    public function failed(Throwable $exception): void
     {
         $message = $exception->getMessage();
 
