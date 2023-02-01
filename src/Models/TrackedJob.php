@@ -76,7 +76,7 @@ class TrackedJob extends Model implements TrackableJobContract
     }
 
     /** Determine which tracked jobs should be pruned. */
-	public function prunable(): Builder
+    public function prunable(): Builder
     {
         if (is_null(config('trackable-jobs.prunable_after'))) {
             return static::query()->where('id', null);

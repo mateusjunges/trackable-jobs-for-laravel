@@ -28,9 +28,9 @@ trait Trackable
         }
 
         $this->trackedJob = TrackedJob::create([
-			'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
-			'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
-			'name' => static::class,
+            'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
+            'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
+            'name' => static::class,
         ]);
     }
 
