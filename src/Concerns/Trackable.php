@@ -28,17 +28,13 @@ trait Trackable
         }
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
-            'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
-            'name' => class_basename(static::class),
+			'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
+			'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
+			'name' => static::class,
         ]);
     }
 
-    /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array
-     */
+    /** Get the middleware the job should pass through. */
     public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
@@ -54,7 +50,7 @@ trait Trackable
         return $this->shouldBeTracked;
     }
 
-    public function failed(Throwable $exception)
+    public function failed(Throwable $exception): void
     {
         $message = $exception->getMessage();
 

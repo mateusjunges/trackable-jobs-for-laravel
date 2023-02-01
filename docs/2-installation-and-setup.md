@@ -3,7 +3,9 @@ title: Installation and setup
 weight: 2
 ---
 
-To install this package, use composer:
+To install this package, you must be running php v8.0 or higher, as well as laravel v9.x or higher.
+
+Use composer:
 ```bash
 composer require mateusjunges/laravel-trackable-jobs
 ```
