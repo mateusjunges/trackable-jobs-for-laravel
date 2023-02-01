@@ -82,9 +82,9 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         $query = static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
-		assert($query instanceof Builder);
+        assert($query instanceof Builder);
 
-		return $query;
+        return $query;
     }
 
     public function trackable(): MorphTo

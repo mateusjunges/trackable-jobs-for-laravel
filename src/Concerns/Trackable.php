@@ -22,7 +22,7 @@ trait Trackable
             'trackable_type' => $this->model->getMorphClass(),
             'name' => static::class,
         ]);
-	}
+    }
 
     public function middleware(): array
     {
