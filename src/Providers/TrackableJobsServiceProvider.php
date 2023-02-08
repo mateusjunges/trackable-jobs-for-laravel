@@ -17,7 +17,7 @@ class TrackableJobsServiceProvider extends ServiceProvider
         ], 'trackable-jobs-assets');
 
         $this->publishes([
-            __DIR__.'/../../database/migrations/2021_04_16_005274_laravel_trackable_create_tracked_jobs_table.php' => $this->getMigrationFileName('create_tracked_jobs_table.php'),
+            __DIR__ . '/../../database/migrations/laravel_trackable_create_tracked_jobs_table.php.stub' => $this->getMigrationFileName('create_tracked_jobs_table.php'),
         ], 'trackable-jobs-assets');
     }
 
