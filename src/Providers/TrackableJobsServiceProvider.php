@@ -17,18 +17,13 @@ class TrackableJobsServiceProvider extends ServiceProvider
         ], 'trackable-jobs-assets');
 
         $this->publishes([
-            __DIR__ . '/../../database/migrations/laravel_trackable_create_tracked_jobs_table.php.stub' => $this->getMigrationFileName('create_tracked_jobs_table.php'),
+            __DIR__ . '/../../database/migrations/laravel_trackable_create_tracked_jobs_table.php.stub'
+                => database_path('migrations/'.date('Y_m_d_His', time()).'_create_tracked_jobs_table.php'),
         ], 'trackable-jobs-assets');
     }
 
     public function register()
     {
         $this->app->bind(TrackableJobContract::class, TrackedJob::class);
-    }
-
-    protected function getMigrationFileName(string $migrationFileName): string
-    {
-        $timestamp = date('Y_m_d_His');
-        return database_path('migrations/' . "{$timestamp}_{$migrationFileName}");
     }
 }
