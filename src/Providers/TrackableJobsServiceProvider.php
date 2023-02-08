@@ -26,22 +26,9 @@ class TrackableJobsServiceProvider extends ServiceProvider
         $this->app->bind(TrackableJobContract::class, TrackedJob::class);
     }
 
-    /**
-     * Returns existing migration file if found, else uses the current timestamp.
-     *
-     * @return string
-     */
-    protected function getMigrationFileName($migrationFileName): string
+    protected function getMigrationFileName(string $migrationFileName): string
     {
         $timestamp = date('Y_m_d_His');
-
-        $filesystem = $this->app->make(Filesystem::class);
-
-        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
-            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
-                return $filesystem->glob($path.'*_'.$migrationFileName);
-            })
-            ->push($this->app->databasePath()."/migrations/{$timestamp}_{$migrationFileName}")
-            ->first();
+        return "{$timestamp}_{$migrationFileName}";
     }
 }
