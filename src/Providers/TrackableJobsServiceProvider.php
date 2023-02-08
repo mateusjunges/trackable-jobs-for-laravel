@@ -29,6 +29,6 @@ class TrackableJobsServiceProvider extends ServiceProvider
     protected function getMigrationFileName(string $migrationFileName): string
     {
         $timestamp = date('Y_m_d_His');
-        return "{$timestamp}_{$migrationFileName}";
+        return database_path('migrations/' . "{$timestamp}_{$migrationFileName}");
     }
 }
