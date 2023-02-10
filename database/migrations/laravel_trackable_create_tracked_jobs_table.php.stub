@@ -15,7 +15,7 @@ return new class extends Migration
         $this->usingUuid = config('trackable-jobs.using_uuid', false);
     }
 
-    public function up()
+    public function up(): void
     {
         Schema::create($this->table_name, function (Blueprint $table) {
             $this->usingUuid
@@ -32,7 +32,7 @@ return new class extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists($this->table_name);
     }
