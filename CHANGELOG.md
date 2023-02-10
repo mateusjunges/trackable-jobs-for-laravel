@@ -1,8 +1,11 @@
 # Changelog
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
+### [v1.6.2 (2023-02-10)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.1...v1.6.2)
+* Allow to publish package migration by @bramvanrijswijk in [#42](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/42)
 
-### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.0...v1.6.1)
+
+### [v1.6.1 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.0...v1.6.1)
 - Use FQCN as TrackedJob `name` instead of class basename (Fixes [#40](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/40)) by @mateusjunges
 
 ### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.5.2...v1.6.0)
