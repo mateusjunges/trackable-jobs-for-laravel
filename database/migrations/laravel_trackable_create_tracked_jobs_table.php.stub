@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class LaravelTrackableCreateTrackedJobsTable extends Migration
+return new class extends Migration
 {
     private string $table_name = '';
     private bool $usingUuid = false;
@@ -15,7 +15,7 @@ class LaravelTrackableCreateTrackedJobsTable extends Migration
         $this->usingUuid = config('trackable-jobs.using_uuid', false);
     }
 
-    public function up()
+    public function up(): void
     {
         Schema::create($this->table_name, function (Blueprint $table) {
             $this->usingUuid
@@ -32,8 +32,8 @@ class LaravelTrackableCreateTrackedJobsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists($this->table_name);
     }
-}
+};
