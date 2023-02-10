@@ -2,8 +2,6 @@
 
 namespace Junges\TrackableJobs\Providers;
 
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
 use Junges\TrackableJobs\Models\TrackedJob;
