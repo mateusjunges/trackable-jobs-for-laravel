@@ -14,14 +14,14 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
 /**
  * @package Junges\TrackableJobs\Models
- * @property string|null uuid
- * @property int trackable_id
- * @property string trackable_type
- * @property string name
- * @property string status
- * @property string|null output
- * @property \Carbon\Carbon|null started_at
- * @property \Carbon\Carbon|null finished_at
+ * @property string|null $uuid
+ * @property int $trackable_id
+ * @property string $trackable_type
+ * @property string $name
+ * @property string $status
+ * @property string|null $output
+ * @property \Carbon\Carbon|null $started_at
+ * @property \Carbon\Carbon|null $finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
