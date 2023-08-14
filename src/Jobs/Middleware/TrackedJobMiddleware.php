@@ -4,11 +4,12 @@ namespace Junges\TrackableJobs\Jobs\Middleware;
 
 class TrackedJobMiddleware
 {
-    public function handle(mixed $job, callable $next)
+    public function handle(mixed $job, callable $next): void
     {
-        if (!$job->shouldBeTracked()) // why would you use this package if you don't track?
+        if (!$job->shouldBeTracked())
         {
-            return $next($job);
+            $next($job);
+            return;
         }
 
         if ($job->job->attempts() > 1)
