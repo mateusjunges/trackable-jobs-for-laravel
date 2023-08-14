@@ -18,7 +18,7 @@ class TestJob implements ShouldQueue
     use SerializesModels;
     use Trackable;
 
-    public function handle()
+    public function handle(): string
     {
         TestTime::addHour();
 

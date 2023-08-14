@@ -11,7 +11,7 @@ if (! function_exists('dispatchWithoutTracking')) {
      * @throws \ReflectionException
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    function dispatchWithoutTracking($job, ...$arguments): PendingDispatch
+    function dispatchWithoutTracking(mixed $job, ...$arguments): PendingDispatch
     {
         $parameters = (new ReflectionClass($job))->getConstructor()->getParameters();
 

@@ -11,25 +11,22 @@ use Throwable;
 
 trait Trackable
 {
-    public ?Model $trackable = null;
-
     public ?TrackedJob $trackedJob = null;
 
-    private bool $shouldBeTracked = true;
-
-    public function __construct(Model $trackable = null, bool $shouldBeTracked = true)
+    public function __construct(
+        public ?Model $trackable = null,
+        private bool $shouldBeTracked = true
+    )
     {
-        $this->trackable = $trackable;
-
-        if (! $shouldBeTracked) {
+        if (!$shouldBeTracked)
+        {
             $this->shouldBeTracked = false;
-
             return;
         }
 
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
-            'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
+            'trackable_type' => $this->trackable?->getMorphClass(),
             'name' => static::class,
         ]);
     }
@@ -67,11 +64,13 @@ trait Trackable
     {
         $parameters = (new ReflectionClass(self::class))->getConstructor()->getParameters();
 
-        if (count($parameters) === 1 && ! count($arguments)) {
+        if (count($parameters) === 1 && !count($arguments))
+        {
             $arguments = [false];
         }
 
-        if (count($parameters) > 1 && count($arguments) === 1) {
+        if (count($parameters) > 1 && count($arguments) === 1)
+        {
             $arguments = [...$arguments, false];
         }
 

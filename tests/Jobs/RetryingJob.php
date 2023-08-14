@@ -2,33 +2,26 @@
 
 namespace Junges\TrackableJobs\Tests\Jobs;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Concerns\Trackable;
-use Spatie\TestTime\TestTime;
 
-class TestJobWithoutModel implements ShouldQueue
+class RetryingJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use Trackable {
-        __construct as __baseConstruct;
-    }
+    use Trackable;
 
-    public function __construct(bool $shouldBeTracked = true)
+    public int $tries = 3;
+
+    public function handle(): void
     {
-        $this->__baseConstruct(null, $shouldBeTracked);
-    }
-
-    public function handle(): string
-    {
-        TestTime::addHour();
-
-        return 'This is a test job without models.';
+        throw new Exception('This job fails, it will be retried 3 times.');
     }
 }

@@ -18,8 +18,8 @@ class FailingJob implements ShouldQueue
     use SerializesModels;
     use Trackable;
 
-    public function handle()
+    public function handle(): void
     {
-        $this->fail(new Exception('This job failed.'));
+        throw new Exception('This job failed.');
     }
 }

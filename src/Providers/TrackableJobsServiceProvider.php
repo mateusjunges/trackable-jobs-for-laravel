@@ -8,7 +8,7 @@ use Junges\TrackableJobs\Models\TrackedJob;
 
 class TrackableJobsServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../../config/trackable-jobs.php' => config_path('trackable-jobs.php'),
@@ -17,7 +17,7 @@ class TrackableJobsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
-    public function register()
+    public function register(): void
     {
         $this->app->bind(TrackableJobContract::class, TrackedJob::class);
     }

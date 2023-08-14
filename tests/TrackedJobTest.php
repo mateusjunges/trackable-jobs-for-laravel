@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
+use Junges\TrackableJobs\Tests\Jobs\RetryingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJobWithoutModel;
 use Spatie\TestTime\TestTime;
@@ -147,14 +148,14 @@ class TrackedJobTest extends TestCase
         $this->assertEquals(0, (new TrackedJob)->prunable()->count());
     }
 
-    public function test_i_can_disable_tracking()
+    public function test_it_can_disable_tracking()
     {
         TestJob::dispatchWithoutTracking($this->user, false);
 
         $this->assertCount(0, TrackedJob::all());
     }
 
-    public function test_i_can_dispatch_one_job_without_tracking_and_the_next_with_tracking()
+    public function test_it_can_dispatch_one_job_without_tracking_and_the_next_with_tracking()
     {
         TestJob::dispatchWithoutTracking(User::first());
 
@@ -173,7 +174,7 @@ class TrackedJobTest extends TestCase
         $this->assertEquals('This is a test job', $tracked->output);
     }
 
-    public function test_i_can_track_jobs_without_models()
+    public function test_it_can_track_jobs_without_models()
     {
         TestJobWithoutModel::dispatchWithoutTracking();
 
@@ -193,5 +194,25 @@ class TrackedJobTest extends TestCase
         $tracked = TrackedJob::first();
 
         $this->assertEquals('This is a test job without models.', $tracked->output);
+    }
+
+    public function test_retry_job_with_attempts_increase_and_it_fails_after_max_attempts()
+    {
+        $job = new RetryingJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame('started', TrackedJob::first()->status);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame('retrying', TrackedJob::first()->status);
+        $this->assertSame(2, TrackedJob::first()->attempts);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame('failed', TrackedJob::first()->status);
     }
 }

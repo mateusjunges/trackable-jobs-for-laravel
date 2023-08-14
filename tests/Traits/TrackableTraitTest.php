@@ -16,7 +16,7 @@ class TrackableTraitTest extends TestCase
     use RefreshDatabase;
     // use MocksApplicationServices;
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 

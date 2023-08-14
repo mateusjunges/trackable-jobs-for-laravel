@@ -2,21 +2,36 @@
 
 namespace Junges\TrackableJobs\Jobs\Middleware;
 
+use Closure;
+
 class TrackedJobMiddleware
 {
-    public function handle($job, $next)
+    public function handle(object $job, Closure $next): void
     {
-        if (! $job->shouldBeTracked()) {
-            return $next($job);
+//        echo 'Attempts # ' . $job->job->attempts() . PHP_EOL;
+//        echo 'Job ID # ' . $job->job->getJobId() . PHP_EOL;
+
+        if (!$job->shouldBeTracked()) // why would you use this package if you don't track?
+        {
+            $next($job);
+            return;
         }
 
-        $job->trackedJob->markAsStarted();
+        if ($job->job->attempts() > 1)
+        {
+            $job->trackedJob->markAsRetrying($job->job->attempts());
+        } else
+        {
+            $job->trackedJob->markAsStarted();
+        }
 
         $response = $next($job);
 
-        if ($job->job->isReleased()) {
+        if ($job->job->isReleased())
+        {
             $job->trackedJob->markAsRetrying();
-        } else {
+        } else
+        {
             $job->trackedJob->markAsFinished($response);
         }
     }

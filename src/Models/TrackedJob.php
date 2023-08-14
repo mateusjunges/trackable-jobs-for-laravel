@@ -14,14 +14,15 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
 /**
  * @package Junges\TrackableJobs\Models
- * @property string|null uuid
- * @property int trackable_id
- * @property string trackable_type
- * @property string name
- * @property string status
- * @property string|null output
- * @property \Carbon\Carbon|null started_at
- * @property \Carbon\Carbon|null finished_at
+ * @property string|null $uuid
+ * @property int $trackable_id
+ * @property string $trackable_type
+ * @property string $name
+ * @property string $status
+ * @property int $attempts
+ * @property string|null $output
+ * @property \Carbon\Carbon|null $started_at
+ * @property \Carbon\Carbon|null $finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
@@ -53,6 +54,7 @@ class TrackedJob extends Model implements TrackableJobContract
         'trackable_type',
         'name',
         'status',
+        'attempts',
         'output',
         'started_at',
         'finished_at',
@@ -118,10 +120,12 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
-    public function markAsRetrying(): bool
+    public function markAsRetrying(int $attempts): bool
     {
         return $this->update([
             'status' => static::STATUS_RETRYING,
+            'started_at' => now(),
+            'attempts' => $attempts
         ]);
     }
 
@@ -157,6 +161,14 @@ class TrackedJob extends Model implements TrackableJobContract
             'output' => $output,
         ]);
     }
+
+    public function updateAttempts(int $attempts): bool
+    {
+        return $this->update([
+            'attempts' => $attempts,
+        ]);
+    }
+
 
     /** Whether the job has already started. */
     public function hasStarted(): bool

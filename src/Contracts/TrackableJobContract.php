@@ -21,6 +21,21 @@ interface TrackableJobContract
     public function markAsStarted(): bool;
 
     /**
+     * Mark the job as retying.
+     *
+     *  @param  int  $attempts
+     * @return bool
+     */
+    public function markAsRetrying(int $attempts): bool;
+
+    /**
+     * Mark the job as Queued.
+     *
+     * @return bool
+     */
+    public function markAsQueued(): bool;
+
+    /**
      * Mark the job as finished successfully.
      *
      * @param  string|null  $message
