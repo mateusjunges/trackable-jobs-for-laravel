@@ -196,7 +196,7 @@ class TrackedJobTest extends TestCase
         $this->assertEquals('This is a test job without models.', $tracked->output);
     }
 
-    public function test_retry_job_with_attempts_increase_and_it_fails_after_max_attempts()
+    public function test_retrying_job_with_attempts_increase_and_it_fails_after_max_attempts()
     {
         $job = new RetryingJob($this->user);
 
@@ -214,5 +214,15 @@ class TrackedJobTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $this->assertSame('failed', TrackedJob::first()->status);
+    }
+
+    public function test_job_id_is_set()
+    {
+        $job = new TestJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+        $this->assertNotEmpty(TrackedJob::first()->job_id);
     }
 }

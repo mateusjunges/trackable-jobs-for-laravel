@@ -53,6 +53,7 @@ class TrackedJob extends Model implements TrackableJobContract
         'trackable_id',
         'trackable_type',
         'name',
+        'job_id',
         'status',
         'attempts',
         'output',
@@ -105,11 +106,12 @@ class TrackedJob extends Model implements TrackableJobContract
      *
      * @return bool
      */
-    public function markAsStarted(): bool
+    public function markAsStarted(string $jobId = null): bool
     {
         return $this->update([
             'status' => static::STATUS_STARTED,
             'started_at' => now(),
+            'job_id' => $jobId,
         ]);
     }
 
@@ -125,7 +127,7 @@ class TrackedJob extends Model implements TrackableJobContract
         return $this->update([
             'status' => static::STATUS_RETRYING,
             'started_at' => now(),
-            'attempts' => $attempts
+            'attempts' => $attempts,
         ]);
     }
 
@@ -161,14 +163,6 @@ class TrackedJob extends Model implements TrackableJobContract
             'output' => $output,
         ]);
     }
-
-    public function updateAttempts(int $attempts): bool
-    {
-        return $this->update([
-            'attempts' => $attempts,
-        ]);
-    }
-
 
     /** Whether the job has already started. */
     public function hasStarted(): bool

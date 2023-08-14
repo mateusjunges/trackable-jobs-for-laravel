@@ -20,11 +20,10 @@ return new class extends Migration {
             $this->usingUuid
                 ? $table->uuid('uuid')->primary()
                 : $table->id();
-            $table->string('trackable_id')->index()->nullable();
-            $table->string('trackable_type')->index()->nullable();
+            $table->string('trackable_id')->index();
+            $table->string('trackable_type')->index();
             $table->string('name');
             $table->string('status')->default('queued');
-            $table->integer('attempts')->default(1);
             $table->longText('output')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finished_at')->nullable();

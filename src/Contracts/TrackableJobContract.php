@@ -15,15 +15,17 @@ interface TrackableJobContract
 
     /**
      * Mark the job as started.
+     * A case where Job ID might be null is possible.
      *
+     * @param ?string $jobId
      * @return bool
      */
-    public function markAsStarted(): bool;
+    public function markAsStarted(string $jobId = null): bool;
 
     /**
      * Mark the job as retying.
      *
-     *  @param  int  $attempts
+     * @param int $attempts
      * @return bool
      */
     public function markAsRetrying(int $attempts): bool;
@@ -38,7 +40,7 @@ interface TrackableJobContract
     /**
      * Mark the job as finished successfully.
      *
-     * @param  string|null  $message
+     * @param string|null $message
      * @return bool
      */
     public function markAsFinished(string $message = null): bool;
@@ -46,7 +48,7 @@ interface TrackableJobContract
     /**
      * Mark the job as finished with error.
      *
-     * @param  string|null  $exception
+     * @param string|null $exception
      * @return bool
      */
     public function markAsFailed(string $exception = null): bool;
@@ -54,7 +56,7 @@ interface TrackableJobContract
     /**
      * Saves the output of the job.
      *
-     * @param  string  $output
+     * @param string $output
      * @return bool
      */
     public function setOutput(string $output): bool;
