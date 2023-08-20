@@ -33,9 +33,9 @@ interface TrackableJobContract
     /**
      * Mark the job as Queued.
      *
-     * @return bool
+     * @param ?string $jobId
      */
-    public function markAsQueued(): bool;
+    public function markAsQueued(string $jobId = null): bool;
 
     /**
      * Mark the job as finished successfully.

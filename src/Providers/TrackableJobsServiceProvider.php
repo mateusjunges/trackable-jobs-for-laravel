@@ -2,6 +2,8 @@
 
 namespace Junges\TrackableJobs\Providers;
 
+
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
 use Junges\TrackableJobs\Models\TrackedJob;
@@ -15,6 +17,11 @@ class TrackableJobsServiceProvider extends ServiceProvider
         ], 'trackable-jobs-config');
 
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+
+        Event::listen(
+            \Illuminate\Queue\Events\JobQueued::class,
+            \Junges\TrackableJobs\Listeners\QueueTrackedJob::class
+        );
     }
 
     public function register(): void

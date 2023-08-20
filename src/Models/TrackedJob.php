@@ -104,24 +104,32 @@ class TrackedJob extends Model implements TrackableJobContract
     /**
      * Mark the job as started.
      *
-     * @return bool
      */
     public function markAsStarted(string $jobId = null): bool
     {
-        return $this->update([
+        return $this->update(array_filter([
             'status' => static::STATUS_STARTED,
             'started_at' => now(),
             'job_id' => $jobId,
-        ]);
+        ]));
     }
 
-    public function markAsQueued(): bool
+    /**
+     * Mark the job as Queued.
+     *
+     */
+    public function markAsQueued(string $jobId = null): bool
     {
-        return $this->update([
+        return $this->update(array_filter([
             'status' => static::STATUS_QUEUED,
-        ]);
+            'job_id' => $jobId,
+        ]));
     }
 
+    /**
+     * Mark the job as Retying.
+     *
+     */
     public function markAsRetrying(int $attempts): bool
     {
         return $this->update([

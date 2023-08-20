@@ -28,6 +28,7 @@ trait Trackable
             'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
             'trackable_type' => $this->trackable?->getMorphClass(),
             'name' => static::class,
+            'status' => null,
         ]);
     }
 

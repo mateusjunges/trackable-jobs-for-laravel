@@ -5,6 +5,7 @@ namespace Junges\TrackableJobs\Tests\Traits;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Queue\Events\JobQueued;
 use Illuminate\Support\Facades\Event;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
@@ -25,13 +26,14 @@ class TrackableTraitTest extends TestCase
 
     public function test_job_executes_without_fail()
     {
-        Event::fake();
+        Event::fake([JobFailed::class]);
         $job = new TestJob($this->user);
 
         app(Dispatcher::class)->dispatch($job);
 
         $this->assertCount(1, TrackedJob::all());
 
+        // Status default is null, STATUS_QUEUED set by JobQueued event.
         $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);

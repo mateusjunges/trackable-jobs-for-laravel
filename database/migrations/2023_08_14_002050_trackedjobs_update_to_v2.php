@@ -17,6 +17,7 @@ return new class extends Migration {
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->string('trackable_id')->nullable()->change();
             $table->string('trackable_type')->nullable()->change();
+            $table->string('status')->default(null)->nullable()->change();
             $table->string('job_id')->nullable()->after('name');
             $table->integer('attempts')->default(1)->after('status');
         });
@@ -27,6 +28,7 @@ return new class extends Migration {
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->string('trackable_id')->nullable(false)->change();
             $table->string('trackable_type')->nullable(false)->change();
+            $table->string('status')->default('queued')->change();
             $table->dropColumn('job_id');
             $table->dropColumn('attempts');
         });

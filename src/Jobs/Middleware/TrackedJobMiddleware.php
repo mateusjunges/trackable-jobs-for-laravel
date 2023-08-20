@@ -17,7 +17,7 @@ class TrackedJobMiddleware
             $job->trackedJob->markAsRetrying($job->job->attempts());
         } else
         {
-            $job->trackedJob->markAsStarted($job->job->getJobId());
+            $job->trackedJob->markAsStarted();
         }
 
         $response = $next($job);
