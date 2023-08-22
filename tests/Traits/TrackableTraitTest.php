@@ -33,7 +33,7 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        // Status default is null, STATUS_QUEUED set by JobQueued event.
+        // Default status is null, STATUS_QUEUED set by JobQueued event.
         $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
@@ -41,6 +41,25 @@ class TrackableTraitTest extends TestCase
         $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
 
         Event::assertNotDispatched(JobFailed::class);
+    }
+
+    public function test_job_queued_event_is_send()
+    {
+        Event::fake([JobQueued::class]);
+        $job = new TestJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        Event::assertDispatched(JobQueued::class);
+    }
+
+    public function test_status_queued_is_updated()
+    {
+        $job = new TestJob($this->user);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
     }
 
     public function test_it_tracks_failed_jobs()
