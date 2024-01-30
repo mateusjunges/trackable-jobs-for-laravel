@@ -4,22 +4,37 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 
 if (! function_exists('dispatchWithoutTracking')) {
     /**
-     * @param  mixed  $job
-     * @param ...$args
+     * Dispatch a trackable job without tracking it.
+     *
+     * @param  string|object  $job
+     * @param ...$arguments
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    function dispatchWithoutTracking($job, ...$args): PendingDispatch
+    function dispatchWithoutTracking(string | object $job, ...$arguments): PendingDispatch
     {
-        $arguments = [...$args, false];
+        if (is_string($job) && class_exists($job)) {
+            $job::$shouldBeTracked = false;
 
-        if (is_string($job)) {
-            $job = new $job(...$arguments);
+            $jobInstance = new $job(...$arguments);
+
+            $job::$shouldBeTracked = true;
+
+            return new PendingDispatch($jobInstance);
         }
 
-        if (! is_object($job)) {
-            throw new InvalidArgumentException("Invalid [$job].");
+        if (is_object($job)) {
+            $class = get_class($job);
+            assert(class_exists($class));
+
+            $class::$shouldBeTracked = false;
+
+            $jobInstance = new $class(...$arguments);
+
+            $class::$shouldBeTracked = true;
+
+            return new PendingDispatch($jobInstance);
         }
 
-        return new PendingDispatch($job);
+        throw new InvalidArgumentException("Invalid [$job].");
     }
 }

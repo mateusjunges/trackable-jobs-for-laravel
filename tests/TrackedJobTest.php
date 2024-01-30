@@ -3,75 +3,28 @@
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Exceptions\UuidNotConfiguredException;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\TestJobWithoutModel;
 use Spatie\TestTime\TestTime;
 
 class TrackedJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
         $app['config']->set('trackable-jobs.using_uuid', false);
     }
 
-    public function test_it_can_get_the_correct_morph()
-    {
-        $job = new TestJob($this->user);
-
-        app(Dispatcher::class)->dispatch($job);
-
-        $this->assertCount(1, TrackedJob::all());
-
-        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
-
-        $this->assertIsObject(TrackedJob::first()->trackable);
-
-        $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
-
-        $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
-    }
-
-    public function test_it_can_get_the_correct_morph_when_using_custom_morph_map()
-    {
-        Relation::morphMap([
-            'test-morph' => User::class,
-        ]);
-
-        $job = new TestJob($this->user);
-
-        app(Dispatcher::class)->dispatch($job);
-
-        $this->assertCount(1, TrackedJob::all());
-
-        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        $this->assertSame(TrackedJob::STATUS_FINISHED, TrackedJob::first()->status);
-
-        $this->assertSame('test-morph', TrackedJob::first()->trackable_type);
-
-        $this->assertIsObject(TrackedJob::first()->trackable);
-
-        $this->assertSame($this->user->id, TrackedJob::first()->trackable->id);
-
-        $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
-    }
-
-    public function test_it_can_get_the_correct_morph_for_failed_jobs()
+    public function test_it_can_get_the_correct_morph_for_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 
@@ -79,11 +32,11 @@ class TrackedJobTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertSame(TrackedJob::STATUS_QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJob::STATUS_FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::FAILED, TrackedJob::first()->status);
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
@@ -92,11 +45,11 @@ class TrackedJobTest extends TestCase
         $this->assertSame($this->user->name, TrackedJob::first()->trackable->name);
     }
 
-    public function test_it_can_get_the_correct_job_duration()
+    public function test_it_can_get_the_correct_job_duration(): void
     {
         TestTime::freeze();
 
-        $job = new TestJob($this->user);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -105,14 +58,14 @@ class TrackedJobTest extends TestCase
         $this->assertSame('1h', TrackedJob::first()->duration);
     }
 
-    public function test_it_throws_exception_if_finding_by_uuid()
+    public function test_it_throws_exception_if_finding_by_uuid(): void
     {
         $this->expectException(UuidNotConfiguredException::class);
 
         TrackedJob::findByUuid(Str::uuid());
     }
 
-    public function test_it_can_prune_models()
+    public function test_it_can_prune_models(): void
     {
         TestTime::freeze();
 
@@ -133,7 +86,7 @@ class TrackedJobTest extends TestCase
         $this->assertEquals(20, (new TrackedJob)->prunable()->count());
     }
 
-    public function test_it_will_not_prune_if_prunable_config_is_null()
+    public function test_it_will_not_prune_if_prunable_config_is_null(): void
     {
         TestTime::freeze();
 
@@ -146,20 +99,20 @@ class TrackedJobTest extends TestCase
         $this->assertEquals(0, (new TrackedJob)->prunable()->count());
     }
 
-    public function test_i_can_disable_tracking()
+    public function test_i_can_disable_tracking(): void
     {
-        TestJob::dispatchWithoutTracking($this->user, false);
+        TestJob::dispatchWithoutTracking();
 
         $this->assertCount(0, TrackedJob::all());
     }
 
-    public function test_i_can_dispatch_one_job_without_tracking_and_the_next_with_tracking()
+    public function test_i_can_dispatch_one_job_without_tracking_and_the_next_with_tracking(): void
     {
-        TestJob::dispatchWithoutTracking(User::first());
+        TestJob::dispatchWithoutTracking();
 
         $this->assertCount(0, TrackedJob::all());
 
-        TestJob::dispatch(User::find(2));
+        TestJob::dispatch();
 
         $this->assertCount(1, TrackedJob::all());
 
@@ -170,5 +123,27 @@ class TrackedJobTest extends TestCase
         $tracked = TrackedJob::first();
 
         $this->assertEquals('This is a test job', $tracked->output);
+    }
+
+    public function test_i_can_track_jobs_without_models(): void
+    {
+        TestJobWithoutModel::dispatchWithoutTracking();
+
+        $this->assertCount(0, TrackedJob::all());
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertCount(0, TrackedJob::all());
+
+        TestJobWithoutModel::dispatch();
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        /** @var TrackedJob $tracked */
+        $tracked = TrackedJob::first();
+
+        $this->assertEquals('This is a test job without models.', $tracked->output);
     }
 }

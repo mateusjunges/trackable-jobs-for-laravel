@@ -76,13 +76,7 @@ class TestCase extends Orchestra
             'email' => 'test2@test.com',
         ]);
 
-        UserUuid::create([
-            'name' => 'Test user uuid',
-            'email' => 'test@test-uuid.com',
-        ]);
-
         $this->user = User::first();
         $this->user2 = User::find(2);
-        $this->userUuid = UserUuid::first();
     }
 }

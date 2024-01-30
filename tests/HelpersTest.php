@@ -3,8 +3,10 @@
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\TestJobWithoutModel;
 
 class HelpersTest extends TestCase
 {
@@ -12,9 +14,13 @@ class HelpersTest extends TestCase
 
     public function test_i_can_dispatch_jobs_without_tracking()
     {
+        Bus::fake();
+
         $this->assertCount(0, TrackedJob::all());
 
-        dispatchWithoutTracking(new TestJob(User::query()->first(), false));
+        dispatchWithoutTracking(TestJob::class);
+
+        Bus::assertDispatched(TestJob::class);
 
         $this->assertCount(0, TrackedJob::all());
 
@@ -22,6 +28,16 @@ class HelpersTest extends TestCase
 
         dispatchWithoutTracking(TestJob::class, User::query()->first(), false);
 
+        Bus::assertDispatched(TestJob::class);
+
         $this->assertCount(0, TrackedJob::all());
+
+        dispatchWithoutTracking(TestJobWithoutModel::class);
+
+        Bus::assertDispatched(TestJob::class);
+
+        $this->assertCount(0, TrackedJob::all());
+
+        Bus::assertDispatched(TestJobWithoutModel::class);
     }
 }

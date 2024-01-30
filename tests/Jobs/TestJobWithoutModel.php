@@ -10,28 +10,25 @@ use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\Concerns\Trackable;
 use Spatie\TestTime\TestTime;
 
-class TestJobUuid implements ShouldQueue
+class TestJobWithoutModel implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use Trackable;
+    use Trackable {
+        __construct as __baseConstruct;
+    }
+
+    public function __construct(bool $shouldBeTracked = true)
+    {
+        $this->__baseConstruct(null, $shouldBeTracked);
+    }
 
     public function handle()
     {
         TestTime::addHour();
 
-        return 'This is a test job';
-    }
-
-    public function trackableType(): ?string
-    {
-        return 'type';
-    }
-
-    public function trackableKey(): ?string
-    {
-        return 'uuid';
+        return 'This is a test job without models.';
     }
 }

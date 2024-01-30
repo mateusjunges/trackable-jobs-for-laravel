@@ -2,7 +2,6 @@
 
 namespace Junges\TrackableJobs\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
@@ -10,50 +9,46 @@ use Throwable;
 
 trait Trackable
 {
-    public ?Model $model;
-
     public ?TrackedJob $trackedJob = null;
 
-    private bool $shouldBeTracked = true;
+    public static bool $shouldBeTracked = true;
 
-    public function __construct($model, bool $shouldBeTracked = true)
+    public function __construct()
     {
-        $this->model = $model;
-
-        if (! $shouldBeTracked) {
-            $this->shouldBeTracked = false;
-
+        if (! static::$shouldBeTracked) {
             return;
         }
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->model->id ?? $this->model->uuid,
-            'trackable_type' => $this->model->getMorphClass(),
-            'name' => class_basename(static::class),
+            'trackable_id' => $this->trackableKey(),
+            'trackable_type' => $this->trackableType(),
+            'name' => static::class,
         ]);
     }
 
-    /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array
-     */
+    protected function trackableKey(): ?string
+    {
+        return null;
+    }
+
+    protected function trackableType(): ?string
+    {
+        return null;
+    }
+
+    /** Get the middleware the job should pass through. */
     public function middleware(): array
     {
         return [new TrackedJobMiddleware()];
     }
 
-    /**
-     * Determines whether the job should be tracked or not.
-     *
-     * @return bool
-     */
+    /** Determines whether the job should be tracked or not. */
     public function shouldBeTracked(): bool
     {
-        return $this->shouldBeTracked;
+        return static::$shouldBeTracked;
     }
 
-    public function failed(Throwable $exception)
+    public function failed(Throwable $exception): void
     {
         $message = $exception->getMessage();
 
@@ -68,9 +63,11 @@ trait Trackable
      */
     public static function dispatchWithoutTracking(...$arguments): PendingDispatch
     {
-        $arguments = [...$arguments, false];
+        static::$shouldBeTracked = false;
 
         $job = new static(...$arguments);
+
+        static::$shouldBeTracked = true;
 
         return new PendingDispatch($job);
     }

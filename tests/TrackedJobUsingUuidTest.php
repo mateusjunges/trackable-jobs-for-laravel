@@ -4,8 +4,10 @@ namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Models\TrackedJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
+use Junges\TrackableJobs\Tests\Jobs\TestJobUuid;
 use Spatie\TestTime\TestTime;
 
 class TrackedJobUsingUuidTest extends TestCase
@@ -33,14 +35,14 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $job = TrackedJob::first();
 
-        $this->assertEquals(TrackedJob::STATUS_FINISHED, $job->status);
+        $this->assertEquals(TrackedJobStatus::FINISHED, $job->status);
 
         $this->assertEquals('1h', $job->duration);
     }
 
     public function test_get_duration_returns_an_empty_string_if_the_job_has_not_started()
     {
-        $job = new TestJob($this->userUuid);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -55,7 +57,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
     public function test_it_can_find_tracked_jobs_by_uuid()
     {
-        $job = new TestJob($this->userUuid);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -72,7 +74,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
     public function test_it_stores_the_model_uuid()
     {
-        $job = new TestJob($this->userUuid);
+        $job = new TestJobUuid();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -86,6 +88,6 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $this->assertEquals(TrackedJob::first(), TrackedJob::findByUuid($uuid));
 
-        $this->assertEquals($this->userUuid->uuid, TrackedJob::first()->trackable_id);
+        $this->assertEquals('uuid', TrackedJob::first()->trackable_id);
     }
 }

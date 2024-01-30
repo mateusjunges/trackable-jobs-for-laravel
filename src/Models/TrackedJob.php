@@ -4,6 +4,7 @@ namespace Junges\TrackableJobs\Models;
 
 use Database\Factories\TrackedJobFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,10 +12,9 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Junges\TrackableJobs\Concerns\HasUuid;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
+use Junges\TrackableJobs\Enums\TrackedJobStatus;
 
 /**
- * Class TrackedJob
- *
  * @package Junges\TrackableJobs\Models
  * @property string|null uuid
  * @property int trackable_id
@@ -22,8 +22,8 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
  * @property string name
  * @property string status
  * @property string|null output
- * @property \Carbon\Carbon|null started_at
- * @property \Carbon\Carbon|null finished_at
+ * @property \Illuminate\Support\Carbon|null started_at
+ * @property \Illuminate\Support\Carbon|null finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
@@ -31,18 +31,6 @@ class TrackedJob extends Model implements TrackableJobContract
     use HasFactory;
     use HasUuid;
     use Prunable;
-
-    const STATUS_QUEUED = 'queued';
-    const STATUS_STARTED = 'started';
-    const STATUS_FINISHED = 'finished';
-    const STATUS_FAILED = 'failed';
-
-    const STATUSES = [
-        self::STATUS_QUEUED,
-        self::STATUS_STARTED,
-        self::STATUS_FINISHED,
-        self::STATUS_FAILED,
-    ];
 
     protected $table = '';
     protected $keyType = 'int';
@@ -61,6 +49,7 @@ class TrackedJob extends Model implements TrackableJobContract
     protected $casts = [
         'started_at' => 'datetime',
         'finished_at' => 'datetime',
+        'status' => TrackedJobStatus::class,
     ];
 
     public function __construct(array $attributes = [])
@@ -75,49 +64,48 @@ class TrackedJob extends Model implements TrackableJobContract
         }
     }
 
-    /**
-     * Determine which tracked jobs should be pruned.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|\Junges\TrackableJobs\Models\TrackedJob
-     */
-    public function prunable()
+    /** Determine which tracked jobs should be pruned. */
+    public function prunable(): Builder
     {
         if (is_null(config('trackable-jobs.prunable_after'))) {
             return static::query()->where('id', null);
         }
 
-        return static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
+        $query = static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
+        assert($query instanceof Builder);
+
+        return $query;
     }
 
-    /**
-     * Return the model related to the tracked job.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
+    /** Return the model related to the tracked job. */
     public function trackable(): MorphTo
     {
         return $this->morphTo('trackable', 'trackable_type', 'trackable_id');
     }
 
-    /**
-     * Mark the job as started.
-     *
-     * @return bool
-     */
+    /** Mark the job as started. */
     public function markAsStarted(): bool
     {
         return $this->update([
-            'status' => static::STATUS_STARTED,
+            'status' => TrackedJobStatus::STARTED->value,
             'started_at' => now(),
         ]);
     }
 
-    /**
-     * Mark the job as finished successfully.
-     *
-     * @param  string|null  $message
-     * @return bool
-     */
+    public function markAsQueued(): bool
+    {
+        return $this->update([
+            'status' => TrackedJobStatus::QUEUED->value,
+        ]);
+    }
+
+    public function markAsRetrying(): bool
+    {
+        return $this->update([
+            'status' => TrackedJobStatus::RETRYING->value,
+        ]);
+    }
+
     public function markAsFinished(string $message = null): bool
     {
         if ($message) {
@@ -125,17 +113,12 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status' => static::STATUS_FINISHED,
+            'status' => TrackedJobStatus::FINISHED->value,
             'finished_at' => now(),
         ]);
     }
 
-    /**
-     * Mark the job as finished with error.
-     *
-     * @param  string|null  $exception
-     * @return bool
-     */
+    /** Mark the job as finished with error. */
     public function markAsFailed(string $exception = null): bool
     {
         if ($exception) {
@@ -143,17 +126,12 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status' => static::STATUS_FAILED,
+            'status' => TrackedJobStatus::FAILED->value,
             'finished_at' => now(),
         ]);
     }
 
-    /**
-     * Saves the output of the job.
-     *
-     * @param  string  $output
-     * @return bool
-     */
+    /** Saves the output of the job. */
     public function setOutput(string $output): bool
     {
         return $this->update([
@@ -161,32 +139,26 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
-    /**
-     * Whether the job has already started.
-     *
-     * @return bool
-     */
+    /** Whether the job has already started. */
     public function hasStarted(): bool
     {
         return ! empty($this->started_at);
     }
 
-    /**
-     * Get the duration of the job, in human diff.
-     *
-     * @throws \Exception
-     *
-     * @return string
-     */
-    public function getDurationAttribute(): string
+    /** Get the duration of the job, in human diff. */
+    public function duration(): Attribute
     {
-        if (! $this->hasStarted()) {
-            return '';
-        }
+        return Attribute::make(
+            get: function () : string {
+                if (! $this->hasStarted()) {
+                    return '';
+                }
 
-        return ($this->finished_at ?? now())
-            ->diffAsCarbonInterval($this->started_at)
-            ->forHumans(['short' => true]);
+                return ($this->finished_at ?? now())
+                    ->diffAsCarbonInterval($this->started_at)
+                    ->forHumans(['short' => true]);
+            }
+        );
     }
 
     protected static function newFactory(): Factory
