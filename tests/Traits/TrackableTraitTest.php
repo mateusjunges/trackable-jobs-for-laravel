@@ -110,5 +110,4 @@ class TrackableTraitTest extends TestCase
 
         $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
     }
-
 }
