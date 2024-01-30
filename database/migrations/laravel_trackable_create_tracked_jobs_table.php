@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +19,7 @@ return new class extends Migration
     {
         Schema::create($this->table_name, function (Blueprint $table) {
             $this->usingUuid
-                ? $table->uuid('uuid')->primary()
+                ? $table->uuid()->primary()
                 : $table->id();
             $table->string('trackable_id')->index()->nullable();
             $table->string('trackable_type')->index()->nullable();
