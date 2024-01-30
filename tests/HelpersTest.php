@@ -12,7 +12,7 @@ class HelpersTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_i_can_dispatch_jobs_without_tracking(): void
+    public function test_it_can_dispatch_jobs_without_tracking(): void
     {
         Bus::fake();
 
