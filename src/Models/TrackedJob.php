@@ -22,8 +22,8 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
  * @property string name
  * @property string status
  * @property string|null output
- * @property \Carbon\Carbon|null started_at
- * @property \Carbon\Carbon|null finished_at
+ * @property \Illuminate\Support\Carbon|null started_at
+ * @property \Illuminate\Support\Carbon|null finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
@@ -77,21 +77,13 @@ class TrackedJob extends Model implements TrackableJobContract
         return $query;
     }
 
-    /**
-     * Return the model related to the tracked job.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
+    /** Return the model related to the tracked job. */
     public function trackable(): MorphTo
     {
         return $this->morphTo('trackable', 'trackable_type', 'trackable_id');
     }
 
-    /**
-     * Mark the job as started.
-     *
-     * @return bool
-     */
+    /** Mark the job as started. */
     public function markAsStarted(): bool
     {
         return $this->update([
@@ -153,11 +145,7 @@ class TrackedJob extends Model implements TrackableJobContract
         return ! empty($this->started_at);
     }
 
-    /**
-     * Get the duration of the job, in human diff.
-     *
-     * @throws \Exception
-     */
+    /** Get the duration of the job, in human diff. */
     public function duration(): Attribute
     {
         return Attribute::make(
