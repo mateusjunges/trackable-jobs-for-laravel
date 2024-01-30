@@ -24,4 +24,14 @@ class TestJobUuid implements ShouldQueue
 
         return 'This is a test job';
     }
+
+    public function trackableType(): ?string
+    {
+        return 'type';
+    }
+
+    public function trackableKey(): ?string
+    {
+        return 'uuid';
+    }
 }

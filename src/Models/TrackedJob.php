@@ -4,6 +4,7 @@ namespace Junges\TrackableJobs\Models;
 
 use Database\Factories\TrackedJobFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Junges\TrackableJobs\Concerns\HasUuid;
 use Junges\TrackableJobs\Contracts\TrackableJobContract;
+use Junges\TrackableJobs\Enums\TrackedJobStatus;
 
 /**
  * @package Junges\TrackableJobs\Models
@@ -30,20 +32,6 @@ class TrackedJob extends Model implements TrackableJobContract
     use HasUuid;
     use Prunable;
 
-    const STATUS_QUEUED = 'queued';
-    const STATUS_RETRYING = 'retrying';
-    const STATUS_STARTED = 'started';
-    const STATUS_FINISHED = 'finished';
-    const STATUS_FAILED = 'failed';
-
-    const STATUSES = [
-        self::STATUS_QUEUED,
-        self::STATUS_RETRYING,
-        self::STATUS_STARTED,
-        self::STATUS_FINISHED,
-        self::STATUS_FAILED,
-    ];
-
     protected $table = '';
     protected $keyType = 'int';
 
@@ -61,6 +49,7 @@ class TrackedJob extends Model implements TrackableJobContract
     protected $casts = [
         'started_at' => 'datetime',
         'finished_at' => 'datetime',
+        'status' => TrackedJobStatus::class,
     ];
 
     public function __construct(array $attributes = [])
@@ -106,7 +95,7 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsStarted(): bool
     {
         return $this->update([
-            'status' => static::STATUS_STARTED,
+            'status' => TrackedJobStatus::STARTED->value,
             'started_at' => now(),
         ]);
     }
@@ -114,14 +103,14 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsQueued(): bool
     {
         return $this->update([
-            'status' => static::STATUS_QUEUED,
+            'status' => TrackedJobStatus::QUEUED->value,
         ]);
     }
 
     public function markAsRetrying(): bool
     {
         return $this->update([
-            'status' => static::STATUS_RETRYING,
+            'status' => TrackedJobStatus::RETRYING->value,
         ]);
     }
 
@@ -132,7 +121,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status' => static::STATUS_FINISHED,
+            'status' => TrackedJobStatus::FINISHED->value,
             'finished_at' => now(),
         ]);
     }
@@ -145,7 +134,7 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status' => static::STATUS_FAILED,
+            'status' => TrackedJobStatus::FAILED->value,
             'finished_at' => now(),
         ]);
     }
@@ -169,15 +158,19 @@ class TrackedJob extends Model implements TrackableJobContract
      *
      * @throws \Exception
      */
-    public function getDurationAttribute(): string
+    public function duration(): Attribute
     {
-        if (! $this->hasStarted()) {
-            return '';
-        }
+        return Attribute::make(
+            get: function () : string {
+                if (! $this->hasStarted()) {
+                    return '';
+                }
 
-        return ($this->finished_at ?? now())
-            ->diffAsCarbonInterval($this->started_at)
-            ->forHumans(['short' => true]);
+                return ($this->finished_at ?? now())
+                    ->diffAsCarbonInterval($this->started_at)
+                    ->forHumans(['short' => true]);
+            }
+        );
     }
 
     protected static function newFactory(): Factory

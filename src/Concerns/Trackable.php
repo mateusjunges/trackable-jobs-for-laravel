@@ -11,27 +11,31 @@ use Throwable;
 
 trait Trackable
 {
-    public ?Model $trackable = null;
-
     public ?TrackedJob $trackedJob = null;
 
-    private bool $shouldBeTracked = true;
+    public static bool $shouldBeTracked = true;
 
-    public function __construct(Model $trackable = null, bool $shouldBeTracked = true)
+    public function __construct()
     {
-        $this->trackable = $trackable;
-
-        if (! $shouldBeTracked) {
-            $this->shouldBeTracked = false;
-
+        if (!static::$shouldBeTracked) {
             return;
         }
 
         $this->trackedJob = TrackedJob::create([
-            'trackable_id' => $this->trackable ? $this->trackable->id ?? $this->trackable->uuid : null,
-            'trackable_type' => $this->trackable ? $this->trackable->getMorphClass() : null,
+            'trackable_id' => $this->trackableKey(),
+            'trackable_type' => $this->trackableType(),
             'name' => static::class,
         ]);
+    }
+
+    protected function trackableKey(): ?string
+    {
+        return null;
+    }
+
+    protected function trackableType(): ?string
+    {
+        return null;
     }
 
     /** Get the middleware the job should pass through. */
@@ -40,14 +44,10 @@ trait Trackable
         return [new TrackedJobMiddleware()];
     }
 
-    /**
-     * Determines whether the job should be tracked or not.
-     *
-     * @return bool
-     */
+    /** Determines whether the job should be tracked or not. */
     public function shouldBeTracked(): bool
     {
-        return $this->shouldBeTracked;
+        return static::$shouldBeTracked;
     }
 
     public function failed(Throwable $exception): void
@@ -65,17 +65,11 @@ trait Trackable
      */
     public static function dispatchWithoutTracking(...$arguments): PendingDispatch
     {
-        $parameters = (new ReflectionClass(self::class))->getConstructor()->getParameters();
-
-        if (count($parameters) === 1 && ! count($arguments)) {
-            $arguments = [false];
-        }
-
-        if (count($parameters) > 1 && count($arguments) === 1) {
-            $arguments = [...$arguments, false];
-        }
+        static::$shouldBeTracked = false;
 
         $job = new static(...$arguments);
+
+        static::$shouldBeTracked = true;
 
         return new PendingDispatch($job);
     }

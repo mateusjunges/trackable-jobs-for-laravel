@@ -6,31 +6,35 @@ if (! function_exists('dispatchWithoutTracking')) {
     /**
      * Dispatch a trackable job without tracking it.
      *
-     * @param  mixed  $job
+     * @param  string|object  $job
      * @param ...$arguments
-     * @throws \ReflectionException
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    function dispatchWithoutTracking($job, ...$arguments): PendingDispatch
+    function dispatchWithoutTracking(string | object $job, ...$arguments): PendingDispatch
     {
-        $parameters = (new ReflectionClass($job))->getConstructor()->getParameters();
+        if (is_string($job) && class_exists($job)) {
+            $job::$shouldBeTracked = false;
 
-        if (count($parameters) === 1 && ! count($arguments)) {
-            $arguments = [false];
+            $jobInstance = new $job(...$arguments);
+
+            $job::$shouldBeTracked = true;
+
+            return new PendingDispatch($jobInstance);
         }
 
-        if (count($parameters) > 1 && count($arguments) === 1) {
-            $arguments = [...$arguments, false];
+        if (is_object($job)) {
+            $class = get_class($job);
+            assert(class_exists($class));
+
+            $class::$shouldBeTracked = false;
+
+            $jobInstance = new $class(...$arguments);
+
+            $class::$shouldBeTracked = true;
+
+            return new PendingDispatch($jobInstance);
         }
 
-        if (is_string($job)) {
-            $job = new $job(...$arguments);
-        }
-
-        if (! is_object($job)) {
-            throw new InvalidArgumentException("Invalid [$job].");
-        }
-
-        return new PendingDispatch($job);
+        throw new InvalidArgumentException("Invalid [$job].");
     }
 }

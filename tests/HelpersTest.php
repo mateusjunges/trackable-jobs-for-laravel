@@ -18,7 +18,7 @@ class HelpersTest extends TestCase
 
         $this->assertCount(0, TrackedJob::all());
 
-        dispatchWithoutTracking(new TestJob(User::query()->first(), false));
+        dispatchWithoutTracking(TestJob::class);
 
         Bus::assertDispatched(TestJob::class);
 
