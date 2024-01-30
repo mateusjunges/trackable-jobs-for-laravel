@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    private string $table_name = '';
-    private bool $usingUuid = false;
+    private string $table_name;
+    private bool $usingUuid;
 
     public function __construct()
     {
