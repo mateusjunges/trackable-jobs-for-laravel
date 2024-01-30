@@ -23,15 +23,16 @@ class TrackableTraitTest extends TestCase
         $app['config']->set('trackable-jobs.using_uuid', false);
     }
 
-    public function test_job_executes_without_fail()
+    public function test_job_executes_without_fail(): void
     {
-        Event::fake();
-        $job = new TestJob($this->user);
+        Event::fake([JobFailed::class]);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
         $this->assertCount(1, TrackedJob::all());
 
+        // This is updated by listening to the JobQueued event.
         $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
@@ -41,7 +42,7 @@ class TrackableTraitTest extends TestCase
         Event::assertNotDispatched(JobFailed::class);
     }
 
-    public function test_it_tracks_failed_jobs()
+    public function test_it_tracks_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 
@@ -56,9 +57,9 @@ class TrackableTraitTest extends TestCase
         $this->assertSame(TrackedJobStatus::FAILED, TrackedJob::first()->status);
     }
 
-    public function test_it_can_get_the_job_output()
+    public function test_it_can_get_the_job_output(): void
     {
-        $job = new TestJob($this->user);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -73,7 +74,7 @@ class TrackableTraitTest extends TestCase
         $this->assertSame('This is a test job', TrackedJob::first()->output);
     }
 
-    public function test_it_can_get_the_output_for_failed_jobs()
+    public function test_it_can_get_the_output_for_failed_jobs(): void
     {
         $job = new FailingJob($this->user);
 
