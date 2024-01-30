@@ -14,11 +14,11 @@ class TrackedJobUsingUuidTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_stores_jobs_using_uuid()
+    public function test_it_stores_jobs_using_uuid(): void
     {
         TestTime::freeze();
 
-        $job = new TestJob($this->userUuid);
+        $job = new TestJob();
 
         app(Dispatcher::class)->dispatch($job);
 
@@ -40,7 +40,7 @@ class TrackedJobUsingUuidTest extends TestCase
         $this->assertEquals('1h', $job->duration);
     }
 
-    public function test_get_duration_returns_an_empty_string_if_the_job_has_not_started()
+    public function test_get_duration_returns_an_empty_string_if_the_job_has_not_started(): void
     {
         $job = new TestJob();
 
@@ -55,7 +55,7 @@ class TrackedJobUsingUuidTest extends TestCase
         $this->assertNull($job->finished_at);
     }
 
-    public function test_it_can_find_tracked_jobs_by_uuid()
+    public function test_it_can_find_tracked_jobs_by_uuid(): void
     {
         $job = new TestJob();
 
@@ -72,7 +72,7 @@ class TrackedJobUsingUuidTest extends TestCase
         $this->assertEquals(TrackedJob::first(), TrackedJob::findByUuid($uuid));
     }
 
-    public function test_it_stores_the_model_uuid()
+    public function test_it_stores_the_model_uuid(): void
     {
         $job = new TestJobUuid();
 

@@ -40,7 +40,9 @@ class TrackedJob extends Model implements TrackableJobContract
         'trackable_id',
         'trackable_type',
         'name',
+        'job_id',
         'status',
+        'attempts',
         'output',
         'started_at',
         'finished_at',
@@ -49,6 +51,7 @@ class TrackedJob extends Model implements TrackableJobContract
     protected $casts = [
         'started_at' => 'datetime',
         'finished_at' => 'datetime',
+        'attempts' => 'integer',
         'status' => TrackedJobStatus::class,
     ];
 
@@ -92,17 +95,19 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
-    public function markAsQueued(): bool
+    public function markAsQueued(string|int|null $jobId = null): bool
     {
         return $this->update([
             'status' => TrackedJobStatus::QUEUED->value,
+            'job_id' => $jobId,
         ]);
     }
 
-    public function markAsRetrying(): bool
+    public function markAsRetrying(int $attempts): bool
     {
         return $this->update([
             'status' => TrackedJobStatus::RETRYING->value,
+            'attempts' => $attempts,
         ]);
     }
 

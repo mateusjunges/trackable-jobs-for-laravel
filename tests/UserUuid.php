@@ -2,34 +2,15 @@
 
 namespace Junges\TrackableJobs\Tests;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use Junges\TrackableJobs\Concerns\HasUuid;
 
-/**
- * Class User.
- *
- * @mixin Builder
- */
-class UserUuid extends Authenticatable
+class UserUuid extends Model
 {
-    use Notifiable;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    use HasUuid;
     protected $fillable = ['name', 'email'];
 
-    /**
-     * @var bool
-     */
     public $timestamps = false;
-
-    /**
-     * @var string
-     */
     protected $table = 'test_users_uuid';
 
     protected $keyType = 'string';
@@ -37,18 +18,4 @@ class UserUuid extends Authenticatable
     public $incrementing = false;
 
     protected $primaryKey = 'uuid';
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (UserUuid $model) {
-            $model->uuid = (string) Str::uuid();
-        });
-    }
-
-    public static function findByUuid(string $uuid): ?UserUuid
-    {
-        return static::where('uuid', $uuid)->first();
-    }
 }

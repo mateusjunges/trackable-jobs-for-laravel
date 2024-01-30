@@ -21,6 +21,7 @@ trait Trackable
 
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->trackableKey(),
+            'status' => null,
             'trackable_type' => $this->trackableType(),
             'name' => static::class,
         ]);

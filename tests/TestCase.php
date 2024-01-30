@@ -71,10 +71,12 @@ class TestCase extends Orchestra
             $app['config']->get('trackable-jobs.using_uuid')
                 ? $table->uuid()
                 : $table->id();
-            $table->string('trackable_id')->index();
-            $table->string('trackable_type')->index();
+            $table->string('trackable_id')->nullable()->index();
+            $table->string('trackable_type')->nullable()->index();
             $table->string('name');
-            $table->string('status')->default('queued');
+            $table->string('job_id')->nullable();
+            $table->string('status')->default(null)->nullable();
+            $table->integer('attempts')->default(1);
             $table->longText('output')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finished_at')->nullable();
