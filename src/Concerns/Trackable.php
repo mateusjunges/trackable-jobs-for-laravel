@@ -40,7 +40,7 @@ trait Trackable
 
     private function isUniqueJobAndCanAcquireLock(): bool
     {
-        return (new UniqueLock(Container::getInstance()->make(Cache::class)))->acquire($this->job);
+        return (new UniqueLock(Container::getInstance()->make(Cache::class)))->acquire($this);
     }
 
     protected function trackableKey(): ?string
