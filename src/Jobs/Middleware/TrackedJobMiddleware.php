@@ -13,7 +13,11 @@ class TrackedJobMiddleware
             return;
         }
 
-        $job->trackedJob->markAsStarted();
+        if ($job->job->attempts() > 1){
+            $job->trackedJob->markAsRetrying($job->job->attempts());
+        } else {
+            $job->trackedJob->markAsStarted();
+        }
 
         $response = $next($job);
 
