@@ -3,7 +3,6 @@
 namespace Junges\TrackableJobs\Tests;
 
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;

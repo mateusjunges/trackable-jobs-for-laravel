@@ -2,11 +2,9 @@
 
 namespace Junges\TrackableJobs\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
-use ReflectionClass;
 use Throwable;
 
 trait Trackable
@@ -17,7 +15,7 @@ trait Trackable
 
     public function __construct()
     {
-        if (!static::$shouldBeTracked) {
+        if (! static::$shouldBeTracked) {
             return;
         }
 
