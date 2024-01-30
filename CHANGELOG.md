@@ -1,6 +1,21 @@
 # Changelog
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
+### [v1.6.2 (2023-02-10)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.1...v1.6.2)
+* Allow to publish package migration by @bramvanrijswijk in [#42](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/42)
+
+
+### [v1.6.1 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.0...v1.6.1)
+- Use FQCN as TrackedJob `name` instead of class basename (Fixes [#40](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/40)) by @mateusjunges
+
+### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.5.2...v1.6.0)
+- Add support for Laravel v10.x in [#41](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/41)
+- Drop support for laravel 8 in [86bf9df](https://github.com/mateusjunges/trackable-jobs-for-laravel/commit/86bf9df6a364ab247cdae059764fe62d5a72118b)
+- Drop support for PHP 7.4 in [86bf9df](https://github.com/mateusjunges/trackable-jobs-for-laravel/commit/86bf9df6a364ab247cdae059764fe62d5a72118b)
+
+### [v1.5.2 (2022-08-05)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.5.1...v1.5.2)
+### Fixed
+- Fixed jobs being marked as failed without attempting any retries on [#36](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/36) by @DimaVIII
 
 ### [v1.6.0 (2023-02-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.0...v1.6.1)
 - Use FQCN as TrackedJob `name` instead of class basename (Fixes [#40](https://github.com/mateusjunges/trackable-jobs-for-laravel/issues/40)) by @mateusjunges

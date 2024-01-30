@@ -65,6 +65,21 @@ class TestCase extends Orchestra
             $table->unsignedInteger('available_at');
             $table->unsignedInteger('created_at');
         });
+        
+        
+        $app['db']->connection()->getSchemaBuilder()->create('tracked_jobs', function (Blueprint $table) use ($app) {
+            $app['config']->get('trackable-jobs.using_uuid')
+                ? $table->uuid()
+                : $table->id();
+            $table->string('trackable_id')->index();
+            $table->string('trackable_type')->index();
+            $table->string('name');
+            $table->string('status')->default('queued');
+            $table->longText('output')->nullable();
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('finished_at')->nullable();
+            $table->timestamps();
+        });
 
         User::create([
             'name' => 'Test user',
