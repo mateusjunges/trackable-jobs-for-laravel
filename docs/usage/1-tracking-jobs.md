@@ -30,7 +30,7 @@ class ProcessPodcastJob implements ShouldQueue
 ```
 
 
-This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public property to the job class.
+This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`.
 If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
 so this package still work as intended.
 
@@ -59,7 +59,7 @@ class ProcessPodcastJob implements ShouldQueue
 
     public function __construct(Podcast $podcast)
     {
-         $this->__baseConstruct($podcast);
+         $this->__baseConstruct();
          
          // Add your code here.
     }

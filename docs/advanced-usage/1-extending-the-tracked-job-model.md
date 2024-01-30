@@ -18,24 +18,9 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->bind(TrackableJobContract::class, YourCustomModel::class);
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
     }
 }
 ```
