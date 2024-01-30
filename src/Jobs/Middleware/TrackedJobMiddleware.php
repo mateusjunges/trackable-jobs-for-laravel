@@ -9,6 +9,7 @@ class TrackedJobMiddleware
     {
         if (! $job->shouldBeTracked()) {
             $next($job);
+
             return;
         }
 
