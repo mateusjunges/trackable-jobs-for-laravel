@@ -5,6 +5,7 @@ namespace Junges\TrackableJobs\Tests\Traits;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Queue\Events\JobQueued;
 use Illuminate\Support\Facades\Event;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Models\TrackedJob;
@@ -90,4 +91,24 @@ class TrackableTraitTest extends TestCase
 
         $this->assertSame('This job failed.', TrackedJob::first()->output);
     }
+
+    public function test_job_queued_event_is_send()
+    {
+        Event::fake([JobQueued::class]);
+        $job = new TestJob();
+
+        app(Dispatcher::class)->dispatch($job);
+
+        Event::assertDispatched(JobQueued::class);
+    }
+
+    public function test_status_queued_is_updated()
+    {
+        $job = new TestJob();
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+    }
+
 }
