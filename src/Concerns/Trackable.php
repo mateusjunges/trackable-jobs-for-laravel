@@ -23,9 +23,9 @@ trait Trackable
             return;
         }
 
-        // If this job implements the ShouldBeUnique, and it is a duplicate, laravel
-        // will discard the job from the queue. Therefore, there is no need to
-        // continue tracking this job, and we can safely return early.
+        // If this job implements ShouldBeUnique and it's a duplicate, laravel
+        // will discard it from the queue. Therefore, there is no need to
+        // continue tracking, and we can safely return early.
         if ($this instanceof ShouldBeUnique && ! $this->isUniqueJobAndCanAcquireLock()) {
             return;
         }
