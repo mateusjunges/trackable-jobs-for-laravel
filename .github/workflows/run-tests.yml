@@ -8,12 +8,14 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.2]
-        laravel: [10.*]
+        php: [8.2, 8.3]
+        laravel: [10.*, 11.*]
         dependency-version: [prefer-stable, prefer-lowest]
         include:
           - laravel: 10.*
             testbench: ^8.0
+          - laravel: 11.*
+            testbench: 9.*
         exclude:
           - laravel: 10.*
             php: 8.0
@@ -30,8 +32,6 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         extensions: mbstring, zip
-        tools: prestissimo
-        coverage: pcov
 
     - name: Install Composer dependencies
       run: |

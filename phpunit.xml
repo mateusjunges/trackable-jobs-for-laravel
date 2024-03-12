@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         backupGlobals="false"
          bootstrap="vendor/autoload.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
-    <testsuites>
-        <testsuite name="Laravel Trackable Jobs Tests">
-            <directory suffix="Test.php">tests</directory>
-        </testsuite>
-    </testsuites>
-    <coverage cacheDirectory="/tmp">
-        <include>
-            <directory suffix=".php">./app</directory>
-        </include>
-        <report>
-            <clover outputFile="./tests/reports/clover.xml"/>
-            <html outputDirectory="./tests/reports/" lowUpperBound="35" highLowerBound="70"/>
-            <text outputFile="php://stdout"/>
-        </report>
-    </coverage>
-    <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
-        <env name="QUEUE_CONNECTION" value="database"/>
-    </php>
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         cacheDirectory=".phpunit.cache"
+         backupStaticProperties="false">
+  <testsuites>
+    <testsuite name="Laravel Trackable Jobs Tests">
+      <directory suffix="Test.php">tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="APP_ENV" value="testing"/>
+    <env name="DB_CONNECTION" value="sqlite"/>
+    <env name="DB_DATABASE" value=":memory:"/>
+    <env name="QUEUE_CONNECTION" value="database"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">./app</directory>
+    </include>
+  </source>
 </phpunit>
