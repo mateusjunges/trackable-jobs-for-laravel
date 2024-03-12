@@ -8,12 +8,14 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.2]
-        laravel: [10.*]
+        php: [8.2, 8.3]
+        laravel: [10.*, 11.*]
         dependency-version: [prefer-stable, prefer-lowest]
         include:
           - laravel: 10.*
             testbench: ^8.0
+          - laravel: 11.*
+            testbench: ^9.0
         exclude:
           - laravel: 10.*
             php: 8.0
