@@ -2,6 +2,10 @@
 
 namespace Junges\TrackableJobs\Concerns;
 
+use Illuminate\Bus\UniqueLock;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
 use Junges\TrackableJobs\Models\TrackedJob;
@@ -19,12 +23,24 @@ trait Trackable
             return;
         }
 
+        // If this job implements ShouldBeUnique and it's a duplicate, laravel
+        // will discard it from the queue. Therefore, there is no need to
+        // continue tracking, and we can safely return early.
+        if ($this instanceof ShouldBeUnique && ! $this->isUniqueJobAndCanAcquireLock()) {
+            return;
+        }
+
         $this->trackedJob = TrackedJob::create([
             'trackable_id' => $this->trackableKey(),
             'status' => null,
             'trackable_type' => $this->trackableType(),
             'name' => static::class,
         ]);
+    }
+
+    private function isUniqueJobAndCanAcquireLock(): bool
+    {
+        return (new UniqueLock(Container::getInstance()->make(Cache::class)))->acquire($this);
     }
 
     protected function trackableKey(): ?string
