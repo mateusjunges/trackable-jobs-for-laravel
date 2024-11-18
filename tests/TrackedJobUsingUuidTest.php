@@ -35,7 +35,7 @@ class TrackedJobUsingUuidTest extends TestCase
 
         $job = TrackedJob::first();
 
-        $this->assertEquals(TrackedJobStatus::FINISHED, $job->status);
+        $this->assertEquals(TrackedJobStatus::Finished, $job->status);
 
         $this->assertEquals('1h', $job->duration);
     }

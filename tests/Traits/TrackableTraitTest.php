@@ -17,7 +17,7 @@ class TrackableTraitTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -34,11 +34,11 @@ class TrackableTraitTest extends TestCase
         $this->assertCount(1, TrackedJob::all());
 
         // This is updated by listening to the JobQueued event.
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJobStatus::FINISHED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Finished, TrackedJob::first()->status);
 
         Event::assertNotDispatched(JobFailed::class);
     }
@@ -51,14 +51,32 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJobStatus::FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Failed, TrackedJob::first()->status);
     }
 
     public function test_it_can_get_the_job_output(): void
+    {
+        $output = ['message' => 'This is a test job', 'exit_code' => 1];
+        $job = new TestJob($output);
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->assertCount(1, TrackedJob::all());
+
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertSame(TrackedJobStatus::Finished, TrackedJob::first()->status);
+
+        $this->assertSame($output, TrackedJob::first()->output);
+    }
+
+    public function it_can_store_strings_as_the_job_output(): void
     {
         $job = new TestJob();
 
@@ -66,11 +84,11 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJobStatus::FINISHED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Finished, TrackedJob::first()->status);
 
         $this->assertSame('This is a test job', TrackedJob::first()->output);
     }
@@ -83,11 +101,11 @@ class TrackableTraitTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJobStatus::FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Failed, TrackedJob::first()->status);
 
         $this->assertSame('This job failed.', TrackedJob::first()->output);
     }
@@ -108,6 +126,6 @@ class TrackableTraitTest extends TestCase
 
         app(Dispatcher::class)->dispatch($job);
 
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
     }
 }
