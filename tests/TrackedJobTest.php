@@ -12,6 +12,7 @@ use Junges\TrackableJobs\Tests\Jobs\FailingJob;
 use Junges\TrackableJobs\Tests\Jobs\RetryingJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJob;
 use Junges\TrackableJobs\Tests\Jobs\TestJobWithoutModel;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\TestTime\TestTime;
 
 class TrackedJobTest extends TestCase
@@ -33,11 +34,11 @@ class TrackedJobTest extends TestCase
 
         $this->assertCount(1, TrackedJob::all());
 
-        $this->assertSame(TrackedJobStatus::QUEUED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Queued, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertSame(TrackedJobStatus::FAILED, TrackedJob::first()->status);
+        $this->assertSame(TrackedJobStatus::Failed, TrackedJob::first()->status);
 
         $this->assertIsObject(TrackedJob::first()->trackable);
 
@@ -57,6 +58,19 @@ class TrackedJobTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $this->assertSame('1h', TrackedJob::first()->duration);
+    }
+
+    public function test_it_creates_the_job_with_the_correct_defaults(): void
+    {
+        $job = new TestJob();
+
+        $this->assertDatabaseHas(TrackedJob::class, [
+            'status' => TrackedJobStatus::Created,
+            'attempts' => 0,
+            'name' => get_class($job),
+            'trackable_type' => null,
+            'trackable_id' => null,
+        ]);
     }
 
     public function test_it_throws_exception_if_finding_by_uuid(): void
@@ -100,54 +114,6 @@ class TrackedJobTest extends TestCase
         $this->assertEquals(0, (new TrackedJob)->prunable()->count());
     }
 
-    public function test_it_can_disable_tracking(): void
-    {
-        TestJob::dispatchWithoutTracking();
-
-        $this->assertCount(0, TrackedJob::all());
-    }
-
-    public function test_it_can_dispatch_one_job_without_tracking_and_the_next_with_tracking(): void
-    {
-        TestJob::dispatchWithoutTracking();
-
-        $this->assertCount(0, TrackedJob::all());
-
-        TestJob::dispatch();
-
-        $this->assertCount(1, TrackedJob::all());
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        /** @var TrackedJob $tracked */
-        $tracked = TrackedJob::first();
-
-        $this->assertEquals('This is a test job', $tracked->output);
-    }
-
-    public function test_it_can_track_jobs_without_models(): void
-    {
-        TestJobWithoutModel::dispatchWithoutTracking();
-
-        $this->assertCount(0, TrackedJob::all());
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        $this->assertCount(0, TrackedJob::all());
-
-        TestJobWithoutModel::dispatch();
-
-        $this->assertCount(1, TrackedJob::all());
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        /** @var TrackedJob $tracked */
-        $tracked = TrackedJob::first();
-
-        $this->assertEquals('This is a test job without models.', $tracked->output);
-    }
-
     public function test_retry_job_with_attempts_increase_and_it_fails_after_max_attempts()
     {
         $job = new RetryingJob();
@@ -156,15 +122,27 @@ class TrackedJobTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJobStatus::STARTED, TrackedJob::first()->status);
+        $this->assertEquals(TrackedJobStatus::Started, TrackedJob::first()->status);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJobStatus::RETRYING, TrackedJob::first()->status);
+        $this->assertEquals(TrackedJobStatus::Retrying, TrackedJob::first()->status);
         $this->assertEquals(2, TrackedJob::first()->attempts);
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->assertEquals(TrackedJobStatus::FAILED, TrackedJob::first()->status);
+        $this->assertEquals(TrackedJobStatus::Failed, TrackedJob::first()->status);
+    }
+
+    #[Test]
+    public function it_can_track_jobs_without_related_models(): void
+    {
+        $job = new TestJobWithoutModel();
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $this->assertEquals(TrackedJobStatus::Finished, TrackedJob::first()->status);
     }
 }
