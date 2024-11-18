@@ -18,6 +18,7 @@ class FailingJob extends TrackableJob implements ShouldQueue, TrackableContract
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+
     public function __construct(public readonly User $user)
     {
         parent::__construct();
