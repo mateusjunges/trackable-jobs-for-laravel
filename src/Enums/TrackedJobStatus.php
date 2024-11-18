@@ -4,9 +4,10 @@ namespace Junges\TrackableJobs\Enums;
 
 enum TrackedJobStatus: string
 {
-    case QUEUED = 'queued';
-    case RETRYING = 'retrying';
-    case STARTED = 'started';
-    case FINISHED = 'finished';
-    case FAILED = 'failed';
+    case Created = 'created';
+    case Queued = 'queued';
+    case Retrying = 'retrying';
+    case Started = 'started';
+    case Finished = 'finished';
+    case Failed = 'failed';
 }
