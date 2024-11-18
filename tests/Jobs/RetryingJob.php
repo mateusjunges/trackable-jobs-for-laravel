@@ -8,15 +8,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Concerns\Trackable;
+use Junges\TrackableJobs\TrackableJob;
 
-final class RetryingJob implements ShouldQueue
+final class RetryingJob extends TrackableJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use Trackable;
 
     public int $tries = 3;
 

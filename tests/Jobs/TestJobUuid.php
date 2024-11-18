@@ -7,18 +7,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Concerns\Trackable;
+use Junges\TrackableJobs\TrackableJob;
 use Spatie\TestTime\TestTime;
 
-class TestJobUuid implements ShouldQueue
+class TestJobUuid extends TrackableJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use Trackable;
 
-    public function handle()
+    public function handle(): string
     {
         TestTime::addHour();
 
