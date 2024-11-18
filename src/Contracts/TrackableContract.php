@@ -2,7 +2,7 @@
 
 namespace Junges\TrackableJobs\Contracts;
 
-interface Trackable
+interface TrackableContract
 {
     /** The key of the model you want the trackable job to be related to. Usually the id or uuid. */
     public function trackableKey(): ?string;
