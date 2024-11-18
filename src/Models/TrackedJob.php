@@ -19,9 +19,10 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
  * @property string|null uuid
  * @property int trackable_id
  * @property string trackable_type
+ * @property int $attempts
  * @property string name
  * @property string status
- * @property string|null output
+ * @property array|string output
  * @property \Illuminate\Support\Carbon|null started_at
  * @property \Illuminate\Support\Carbon|null finished_at
  * @mixin Builder
@@ -32,9 +33,11 @@ class TrackedJob extends Model implements TrackableJobContract
     use HasUuid;
     use Prunable;
 
+    /** @var string */
     protected $table = '';
     protected $keyType = 'int';
 
+    /** @var list<string> */
     protected $fillable = [
         'uuid',
         'trackable_id',
@@ -48,12 +51,22 @@ class TrackedJob extends Model implements TrackableJobContract
         'finished_at',
     ];
 
-    protected $casts = [
-        'started_at' => 'datetime',
-        'finished_at' => 'datetime',
-        'attempts' => 'integer',
-        'status' => TrackedJobStatus::class,
+    /** @var array<string, int> */
+    protected $attributes = [
+        'attempts' => 0,
+        'output' => '[]',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'finished_at' => 'datetime',
+            'attempts' => 'integer',
+            'output' => 'array',
+            'status' => TrackedJobStatus::class,
+        ];
+    }
 
     public function __construct(array $attributes = [])
     {
@@ -90,7 +103,8 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsStarted(): bool
     {
         return $this->update([
-            'status' => TrackedJobStatus::STARTED->value,
+            'status' => TrackedJobStatus::Started->value,
+            'attempts' => 1,
             'started_at' => now(),
         ]);
     }
@@ -98,7 +112,7 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsQueued(string|int|null $jobId = null): bool
     {
         return $this->update([
-            'status' => TrackedJobStatus::QUEUED->value,
+            'status' => TrackedJobStatus::Queued->value,
             'job_id' => $jobId,
         ]);
     }
@@ -106,19 +120,19 @@ class TrackedJob extends Model implements TrackableJobContract
     public function markAsRetrying(int $attempts): bool
     {
         return $this->update([
-            'status' => TrackedJobStatus::RETRYING->value,
+            'status' => TrackedJobStatus::Retrying->value,
             'attempts' => $attempts,
         ]);
     }
 
-    public function markAsFinished(string $message = null): bool
+    public function markAsFinished($message = null): bool
     {
         if ($message) {
             $this->setOutput($message);
         }
 
         return $this->update([
-            'status' => TrackedJobStatus::FINISHED->value,
+            'status' => TrackedJobStatus::Finished->value,
             'finished_at' => now(),
         ]);
     }
@@ -131,13 +145,13 @@ class TrackedJob extends Model implements TrackableJobContract
         }
 
         return $this->update([
-            'status' => TrackedJobStatus::FAILED->value,
+            'status' => TrackedJobStatus::Failed->value,
             'finished_at' => now(),
         ]);
     }
 
     /** Saves the output of the job. */
-    public function setOutput(string $output): bool
+    public function setOutput($output): bool
     {
         return $this->update([
             'output' => $output,
