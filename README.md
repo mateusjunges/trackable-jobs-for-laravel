@@ -32,39 +32,7 @@ Run `php artisan migrate` to migrate the table needed by this package, and now y
 
 ## Tracking Jobs
 
-To start tracking your jobs, you just need to use the `Junges\TrackableJobs\Concerns\Trackable` trait in the job you want to track. For example, let's say you want to track the status of `ProcessPodcastJob`, just add the Trackable trait into your job:
-
-
-```php
-<?php
-
-namespace App\Jobs;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Concerns\Trackable;
-
-class ProcessPodcastJob implements ShouldQueue
-{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
-
-    public function handle()
-    {
-        //
-    }
-}
-```
-
-
-This trait provides 3 methods to your job: `__construct`, `failed` and `middleware`. It also adds a `model` public property to the job class.
-If you want to override any of the methods, you must copy and paste (because you can't use `parent` for traits) the content of each one inside your class,
-so this package still work as intended.
-
-For example: if you need to change the constructor of your job, you can use the `Junges\TrackableJobs\Concerns\Trackable` and alias the `__construct` with some other name, for example:
-
+To start tracking your jobs, you just need to extend the base `\Junges\TrackableJobs\TrackableJob` class in the job you want to track. For example, let's say you want to track the status of `ProcessPodcastJob`:
 
 ```php
 <?php
@@ -76,22 +44,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Junges\TrackableJobs\Concerns\Trackable;
-use App\Models\Podcast;
-use Junges\TrackableJobs\Models\TrackedJob;
+use Junges\TrackableJobs\TrackableJob;
 
-class ProcessPodcastJob implements ShouldQueue
+class ProcessPodcastJob extends TrackableJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable {
-        __construct as __baseConstruct;
-    }
-
-    public function __construct(Podcast $podcast)
-    {
-         $this->__baseConstruct($podcast);
-         
-         // Add your code here.
-    }
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function handle()
     {
@@ -100,9 +57,7 @@ class ProcessPodcastJob implements ShouldQueue
 }
 ```
 
-It can be done with any method you want to change.
-
-This package will store the last status of your job, which can be `queued`, `started`, `failed` or `finished`. Also, it stores the
+This package will store the last status of your job, which can be `created`, `queued`, `started`, `failed` or `finished`. Also, it stores the
 `started_at` and `finished_at` timestamps for each tracked job.
 
 To use it, you just need to pass any model to your Job constructor:
@@ -134,8 +89,9 @@ return [
 ];
 ```
 
-## Tracking job chains
-Laravel supports job chaining out of the box:
+## Associating tracked jobs with a model
+Associating a tracked job with a model is specially useful if you want to track the steps to achieve something.
+Let's say you are using job chains for releasing your new podcast. Here's an example:
 
 ```php
 Bus::dispatchChain([
@@ -145,25 +101,39 @@ Bus::dispatchChain([
 ])->dispatch();
 ```
 
+Job chain are a nice and fluent way of saying "Run this jobs sequentially, one after the previous one is complete.".
 
-It's a nice, fluent way of saying "Run this jobs sequentially, one after the previous one is complete.".
-
-If you have a task which takes some steps to be completed, you can track the job chain used to do that and know the
-status for each job.
-If you are releasing a new podcast, for example, and it has to be optimized, compressed and released, you can track
-this steps by adding a `steps` relationship to your `Podcast` model:
+In this case, it might be useful to relate all jobs in this chain to the main `$podcast` model.
+You can achieve that by overriding the `trackableType` and `trackableKey` in each one of the jobs in your chain:
 
 ```php
-public function steps()
+public function trackableType(): ?string
+{
+    return $this->podcast->getMorphClass();
+}
+
+public function trackableKey(): ?string
+{
+    return (string) $this->podcast->id;
+}
+```
+
+Now, this package will automatically relate tracked jobs to the podcast model passed in the job constructor.
+
+You can get all the `steps` by adding a relationship to your `Podcast` model:
+
+```php
+public function steps(): \Illuminate\Database\Eloquent\Relations\MorphMany
 {
     return $this->morphMany(Junges\TrackableJobs\Models\TrackedJob::class, 'trackable');
 }
 ```
 
+
 Now, you can have the status of each job that should be processed to release your podcast:
 
 ```php
-$steps = Podcast::find($id)->steps()->get();
+$steps = Podcast::find($id)->steps;
 ```
 
 ## Persist job Output
@@ -178,6 +148,8 @@ public function handle()
 }
 ```
 The string `Job finished successfully` will be stored as the output of this job.
+
+The output returned by your job will be stored as `json`.
 
 ## Extending the tracked job model
 
@@ -204,16 +176,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(TrackableJobContract::class, YourCustomModel::class);
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
     }
 }
 ```
