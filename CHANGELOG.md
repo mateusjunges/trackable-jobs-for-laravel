@@ -2,6 +2,13 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v2.0.0 (2024-11-22)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v1.7.0...v2.0.0)
+* Dispatch jobs without relating to models by @mateusjunges in https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/33
+* Improve job status tracking by @mateusjunges in https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/46
+* Drop support for Laravel 9 by @mateusjunges
+* Drop support for Laravel 10 by @mateusjunges
+* Drop support for PHP 8.1 by @mateusjunges
+
 ### [v1.7.0 (2024-03-12)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/1.6.3...v1.7.0)
 * Add support for Laravel 11 by @mateusjunges in [#50](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/50)
 
