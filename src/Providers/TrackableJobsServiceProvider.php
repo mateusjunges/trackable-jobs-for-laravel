@@ -20,7 +20,6 @@ class TrackableJobsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../database/migrations/laravel_trackable_create_tracked_jobs_table.php'
                 => database_path('migrations/'.date('Y_m_d_His', time()).'_create_tracked_jobs_table.php'),
-            __DIR__. '/../../database/migrations/laravel_trackable_jobs_v2.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_trackable_jobs_v2.php'),
         ], 'trackable-jobs-assets');
 
         Event::listen(JobQueued::class, UpdateTrackedJobStatus::class);
