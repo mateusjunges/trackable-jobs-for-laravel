@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v2.0.1 (2024-12-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.0.0...v2.0.1)
+* Fix publish command by @mateusjunges
+
 ### [v2.0.0 (2024-11-22)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v1.7.0...v2.0.0)
 * Dispatch jobs without relating to models by @mateusjunges in https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/33
 * Improve job status tracking by @mateusjunges in https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/46
