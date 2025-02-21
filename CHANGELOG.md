@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v2.1.0 (2025-02-21)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.0.1...v2.1.0)
+* Add support for Laravel 12 by [@laravel-shift](https://github.com/laravel-shift) in [#60](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/60)
+
 ### [v2.0.1 (2024-12-01)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.0.0...v2.0.1)
 * Fix publish command by @mateusjunges
 
