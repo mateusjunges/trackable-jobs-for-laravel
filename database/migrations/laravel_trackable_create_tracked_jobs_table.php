@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('trackable_id')->index()->nullable();
             $table->string('trackable_type')->index()->nullable();
             $table->string('name');
+            $table->string('job_id')->nullable();
             $table->string('status')->nullable();
-            $table->string('job_id')->nullable()->after('name');
-            $table->integer('attempts')->default(1)->after('status');
+            $table->integer('attempts')->default(1);
             $table->json('output')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finished_at')->nullable();
