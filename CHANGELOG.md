@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v2.2.0 (2025-08-29)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.1.2...v2.2.0)
+- Tracks queue where the job has been queued by [@mateusjunges](https://github.com/mateusjunges) in [#65](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/65)
+
 ### [v2.1.2 (2025-08-29)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.1.1...v2.1.2)
 - Update docblock by [@ThijsLacquet](https://github.com/ThijsLacquet) in [#64](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/64)
 
