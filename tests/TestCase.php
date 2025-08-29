@@ -76,6 +76,7 @@ class TestCase extends Orchestra
             $table->string('name');
             $table->string('job_id')->nullable();
             $table->string('status')->default(null)->nullable();
+            $table->string('queue')->nullable()->index();
             $table->integer('attempts')->default(1);
             $table->longText('output')->nullable();
             $table->timestamp('started_at')->nullable();

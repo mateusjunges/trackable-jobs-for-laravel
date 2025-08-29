@@ -21,6 +21,7 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
  * @property int $attempts
  * @property string $name
  * @property TrackedJobStatus $status
+ * @property string|null $queue
  * @property array|string $output
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $finished_at
@@ -46,6 +47,7 @@ class TrackedJob extends Model implements TrackableJobContract
         'name',
         'job_id',
         'status',
+        'queue',
         'attempts',
         'output',
         'started_at',
@@ -104,6 +106,13 @@ class TrackedJob extends Model implements TrackableJobContract
         return $this->update([
             'status' => TrackedJobStatus::Queued->value,
             'job_id' => $jobId,
+        ]);
+    }
+
+    public function setQueue(string $queue): bool
+    {
+        return $this->update([
+            'queue' => $queue,
         ]);
     }
 

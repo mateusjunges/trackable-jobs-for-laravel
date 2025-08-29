@@ -77,7 +77,7 @@ class TrackedJobTest extends TestCase
     {
         $this->expectException(UuidNotConfiguredException::class);
 
-        TrackedJob::findByUuid(Str::uuid());
+        TrackedJob::findByUuid(Str::uuid()->toString());
     }
 
     public function test_it_can_prune_models(): void
@@ -144,5 +144,19 @@ class TrackedJobTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $this->assertEquals(TrackedJobStatus::Finished, TrackedJob::first()->status);
+    }
+
+    #[Test]
+    public function it_tracks_queue_name_when_job_is_dispatched(): void
+    {
+        $job = (new TestJob())->onQueue('custom-queue');
+
+        app(Dispatcher::class)->dispatch($job);
+
+        $trackedJob = TrackedJob::first();
+
+        $this->assertNotNull($trackedJob);
+        $this->assertEquals('custom-queue', $trackedJob->queue);
+        $this->assertEquals(TrackedJobStatus::Queued, $trackedJob->status);
     }
 }
