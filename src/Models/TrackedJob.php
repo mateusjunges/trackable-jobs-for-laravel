@@ -16,15 +16,15 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
 
 /**
  * @package Junges\TrackableJobs\Models
- * @property string|null uuid
- * @property int trackable_id
- * @property string trackable_type
+ * @property string|null $uuid
+ * @property int $trackable_id
+ * @property string $trackable_type
  * @property int $attempts
- * @property string name
- * @property string status
- * @property array|string output
- * @property \Illuminate\Support\Carbon|null started_at
- * @property \Illuminate\Support\Carbon|null finished_at
+ * @property string $name
+ * @property \Junges\TrackableJobs\Enums\TrackedJobStatus $status
+ * @property array|string $output
+ * @property \Illuminate\Support\Carbon|null $started_at
+ * @property \Illuminate\Support\Carbon|null $finished_at
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
