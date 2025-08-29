@@ -119,6 +119,13 @@ class TrackedJob extends Model implements TrackableJobContract
         ]);
     }
 
+    public function setQueue(string $queue): bool
+    {
+        return $this->update([
+            'queue' => $queue,
+        ]);
+    }
+
     public function markAsRetrying(int $attempts): bool
     {
         return $this->update([
