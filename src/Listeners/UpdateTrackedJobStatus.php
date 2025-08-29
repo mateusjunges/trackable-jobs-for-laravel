@@ -14,7 +14,7 @@ final class UpdateTrackedJobStatus
             assert($trackedJob instanceof TrackableJobContract);
 
             $trackedJob->markAsQueued($event->id);
-            
+
             if (method_exists($trackedJob, 'setQueue') && isset($event->queue)) {
                 $trackedJob->setQueue($event->queue);
             }
