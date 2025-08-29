@@ -4,4 +4,6 @@ namespace Junges\TrackableJobs\Exceptions;
 
 use Exception;
 
-class TrackableJobsException extends Exception {}
+class TrackableJobsException extends Exception
+{
+}
