@@ -2,6 +2,9 @@
 
 All relevant changes in `mateusjunges/laravel-trackable-jobs` will be documented here.
 
+### [v2.1.2 (2025-08-29)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.1.1...v2.1.2)
+- Update docblock by [@ThijsLacquet](https://github.com/ThijsLacquet) in [#64](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/64)
+
 ### [v2.1.1 (2025-02-22)](https://github.com/mateusjunges/trackable-jobs-for-laravel/compare/v2.1.0...v2.1.1)
 * Fix syntax error on MariaDB by [@mateusjunges](https://github.com/mateusjunges) in [#61](https://github.com/mateusjunges/trackable-jobs-for-laravel/pull/61)
 
