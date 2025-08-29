@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Junges\TrackableJobs\Models;
 
@@ -15,17 +15,17 @@ use Junges\TrackableJobs\Contracts\TrackableJobContract;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;
 
 /**
- * @package Junges\TrackableJobs\Models
  * @property string|null $uuid
  * @property int $trackable_id
  * @property string $trackable_type
  * @property int $attempts
  * @property string $name
- * @property \Junges\TrackableJobs\Enums\TrackedJobStatus $status
+ * @property TrackedJobStatus $status
  * @property string|null $queue
  * @property array|string $output
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $finished_at
+ *
  * @mixin Builder
  */
 class TrackedJob extends Model implements TrackableJobContract
@@ -36,6 +36,7 @@ class TrackedJob extends Model implements TrackableJobContract
 
     /** @var string */
     protected $table = '';
+
     protected $keyType = 'int';
 
     /** @var list<string> */
@@ -58,17 +59,6 @@ class TrackedJob extends Model implements TrackableJobContract
         'attempts' => 0,
         'output' => '[]',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'started_at' => 'datetime',
-            'finished_at' => 'datetime',
-            'attempts' => 'integer',
-            'output' => 'array',
-            'status' => TrackedJobStatus::class,
-        ];
-    }
 
     public function __construct(array $attributes = [])
     {
@@ -147,7 +137,7 @@ class TrackedJob extends Model implements TrackableJobContract
     }
 
     /** Mark the job as finished with error. */
-    public function markAsFailed(string $exception = null): bool
+    public function markAsFailed(?string $exception = null): bool
     {
         if ($exception) {
             $this->setOutput($exception);
@@ -177,7 +167,7 @@ class TrackedJob extends Model implements TrackableJobContract
     public function duration(): Attribute
     {
         return Attribute::make(
-            get: function () : string {
+            get: function (): string {
                 if (! $this->hasStarted()) {
                     return '';
                 }
@@ -192,5 +182,16 @@ class TrackedJob extends Model implements TrackableJobContract
     protected static function newFactory(): Factory
     {
         return new TrackedJobFactory();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'finished_at' => 'datetime',
+            'attempts' => 'integer',
+            'output' => 'array',
+            'status' => TrackedJobStatus::class,
+        ];
     }
 }

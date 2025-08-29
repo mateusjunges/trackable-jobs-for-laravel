@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Junges\TrackableJobs\Contracts;
 
@@ -16,13 +16,13 @@ interface TrackableJobContract
     public function markAsStarted(): bool;
 
     /** Mark the job as finished successfully. */
-    public function markAsFinished(string $message = null): bool;
+    public function markAsFinished(?string $message = null): bool;
 
     /** Mark the job as retrying. */
     public function markAsRetrying(int $attempts): bool;
 
     /** Mark the job as finished with error. */
-    public function markAsFailed(string $exception = null): bool;
+    public function markAsFailed(?string $exception = null): bool;
 
     /** Saves the output of the job. */
     public function setOutput(string $output): bool;
