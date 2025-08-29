@@ -77,7 +77,7 @@ class TrackedJobTest extends TestCase
     {
         $this->expectException(UuidNotConfiguredException::class);
 
-        TrackedJob::findByUuid(Str::uuid());
+        TrackedJob::findByUuid(Str::uuid()->toString());
     }
 
     public function test_it_can_prune_models(): void
