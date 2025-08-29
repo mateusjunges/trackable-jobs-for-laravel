@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Models\TrackedJob;
 
@@ -22,7 +21,7 @@ class TrackedJobFactory extends Factory
             'started_at' => now(),
             'finished_at' => now()->addHour(),
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ];
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 return [
     /*
@@ -18,5 +18,5 @@ return [
      | This config determine how old your (in days) models should be before they get pruned.
      | If null, it will not delete any models.
      */
-    'prunable_after' => null
+    'prunable_after' => null,
 ];

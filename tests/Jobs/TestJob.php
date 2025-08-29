@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Junges\TrackableJobs\Tests\Jobs;
 
@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Junges\TrackableJobs\TrackableJob;
 use Spatie\TestTime\TestTime;
 
-class TestJob extends TrackableJob implements ShouldQueue, ShouldBeUnique
+class TestJob extends TrackableJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
