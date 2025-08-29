@@ -22,6 +22,7 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
  * @property int $attempts
  * @property string $name
  * @property \Junges\TrackableJobs\Enums\TrackedJobStatus $status
+ * @property string|null $queue
  * @property array|string $output
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $finished_at
@@ -45,6 +46,7 @@ class TrackedJob extends Model implements TrackableJobContract
         'name',
         'job_id',
         'status',
+        'queue',
         'attempts',
         'output',
         'started_at',
