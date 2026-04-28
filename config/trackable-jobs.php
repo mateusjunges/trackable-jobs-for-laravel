@@ -19,4 +19,19 @@ return [
      | If null, it will not delete any models.
      */
     'prunable_after' => null,
+
+    /*
+     | Override this to use your own model.
+     */
+    'model' => Junges\TrackableJobs\Models\TrackedJob::class,
+
+    /*
+     | Optional context wrapper used for tracked-job DB operations (create/find).
+     |
+     | Signature:
+     | fn (\Junges\TrackableJobs\TrackableJob $job, callable $callback): mixed
+     |
+     | Use this to bind tenant / connection context centrally instead of per-job overrides.
+     */
+    'tracking_context' => null,
 ];

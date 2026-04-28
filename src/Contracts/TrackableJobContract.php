@@ -4,6 +4,9 @@ namespace Junges\TrackableJobs\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @phpstan-require-extends \Illuminate\Database\Eloquent\Model
+ */
 interface TrackableJobContract
 {
     /** Return the model related to the tracked job. */
