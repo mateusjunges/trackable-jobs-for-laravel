@@ -22,15 +22,17 @@ use Junges\TrackableJobs\Enums\TrackedJobStatus;
  * @property string $name
  * @property TrackedJobStatus $status
  * @property string|null $queue
- * @property array|string $output
+ * @property array<array-key, mixed>|string $output
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $finished_at
  *
- * @mixin Builder
+ * @mixin Builder<TrackedJob>
  */
 class TrackedJob extends Model implements TrackableJobContract
 {
+    /** @use HasFactory<TrackedJobFactory> */
     use HasFactory;
+
     use HasUuid;
     use Prunable;
 
@@ -54,7 +56,7 @@ class TrackedJob extends Model implements TrackableJobContract
         'finished_at',
     ];
 
-    /** @var array<string, int> */
+    /** @var array<string, int|string> */
     protected $attributes = [
         'attempts' => 0,
         'output' => '[]',
@@ -63,7 +65,8 @@ class TrackedJob extends Model implements TrackableJobContract
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setTable(config('trackable-jobs.tables.tracked_jobs', 'tracked_jobs'));
+        $table = config('trackable-jobs.tables.tracked_jobs', 'tracked_jobs');
+        $this->setTable(is_string($table) ? $table : 'tracked_jobs');
 
         if (config('trackable-jobs.using_uuid', false)) {
             $this->setKeyType('string');
@@ -72,17 +75,20 @@ class TrackedJob extends Model implements TrackableJobContract
         }
     }
 
-    /** Determine which tracked jobs should be pruned. */
+    /**
+     * Determine which tracked jobs should be pruned.
+     *
+     * @return Builder<TrackedJob>
+     */
     public function prunable(): Builder
     {
-        if (is_null(config('trackable-jobs.prunable_after'))) {
-            return static::query()->where('id', null);
+        $prunableAfter = config('trackable-jobs.prunable_after');
+
+        if (! is_numeric($prunableAfter)) {
+            return static::where('id', null);
         }
 
-        $query = static::where('created_at', '<=', now()->subDays(config('trackable-jobs.prunable_after')));
-        assert($query instanceof Builder);
-
-        return $query;
+        return static::where('created_at', '<=', now()->subDays((int) $prunableAfter));
     }
 
     /** Return the model related to the tracked job. */
@@ -179,6 +185,7 @@ class TrackedJob extends Model implements TrackableJobContract
         );
     }
 
+    /** @return Factory<TrackedJob> */
     protected static function newFactory(): Factory
     {
         return new TrackedJobFactory();

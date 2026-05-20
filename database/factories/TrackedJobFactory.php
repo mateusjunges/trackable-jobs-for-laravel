@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Models\TrackedJob;
 
+/** @extends Factory<TrackedJob> */
 class TrackedJobFactory extends Factory
 {
     protected $model = TrackedJob::class;

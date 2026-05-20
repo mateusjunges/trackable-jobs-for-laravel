@@ -2,6 +2,7 @@
 
 namespace Junges\TrackableJobs;
 
+use Illuminate\Queue\InteractsWithQueue;
 use Junges\TrackableJobs\Contracts\TrackableContract;
 use Junges\TrackableJobs\Enums\TrackedJobStatus;
 use Junges\TrackableJobs\Jobs\Middleware\TrackedJobMiddleware;
@@ -10,6 +11,8 @@ use Throwable;
 
 abstract class TrackableJob implements TrackableContract
 {
+    use InteractsWithQueue;
+
     public ?TrackedJob $trackedJob = null;
 
     public function __construct()
@@ -33,7 +36,11 @@ abstract class TrackableJob implements TrackableContract
         return null;
     }
 
-    /** Get the middleware the job should pass through. */
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
     public function middleware(): array
     {
         return [new TrackedJobMiddleware()];

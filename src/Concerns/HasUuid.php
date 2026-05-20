@@ -15,7 +15,7 @@ trait HasUuid
             if (! config('trackable-jobs.using_uuid', false)) {
                 return;
             }
-            $model->uuid = (string) Str::uuid();
+            $model->setAttribute('uuid', (string) Str::uuid());
         });
     }
 

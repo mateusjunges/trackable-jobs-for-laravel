@@ -2,23 +2,26 @@
 
 namespace Junges\TrackableJobs\Jobs\Middleware;
 
-/** @property-read \Illuminate\Contracts\Queue\Job $job */
+use Junges\TrackableJobs\TrackableJob;
+
 class TrackedJobMiddleware
 {
-    public function handle(mixed $job, callable $next): void
+    public function handle(TrackableJob $job, callable $next): void
     {
-        if ($job->job->attempts() > 1) {
-            $job->trackedJob->markAsRetrying($job->job->attempts());
+        $queueJob = $job->job;
+
+        if ($queueJob !== null && $queueJob->attempts() > 1) {
+            $job->trackedJob?->markAsRetrying($queueJob->attempts());
         } else {
-            $job->trackedJob->markAsStarted();
+            $job->trackedJob?->markAsStarted();
         }
 
         $response = $next($job);
 
-        if ($job->job->isReleased()) {
-            $job->trackedJob->markAsRetrying($this->job->attempts());
+        if ($queueJob !== null && $queueJob->isReleased()) {
+            $job->trackedJob?->markAsRetrying($queueJob->attempts());
         } else {
-            $job->trackedJob->markAsFinished($response);
+            $job->trackedJob?->markAsFinished($response);
         }
     }
 }
