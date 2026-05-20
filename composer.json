@@ -14,29 +14,27 @@
         "php": "^8.3",
         "illuminate/support": "^12.0|^13.0",
         "illuminate/queue": "^12.0|^13.0",
-        "illuminate/database": "^12.0|^13.0",
-        "laravel/pint": "dev-main"
+        "illuminate/database": "^12.0|^13.0"
     },
     "require-dev": {
         "orchestra/testbench": "^10.0|^11.0",
         "phpunit/phpunit": "^9.5|^10.5|^11.5.3|^12.5.12",
-        "spatie/test-time": "^1.2"
+        "spatie/test-time": "^1.2",
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.29"
     },
     "autoload": {
         "psr-4": {
             "Junges\\TrackableJobs\\": "src/",
             "Database\\Factories\\": "database/factories/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Junges\\TrackableJobs\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "laravel": {
             "providers": [
@@ -45,6 +43,12 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit tests"
+        "test": "vendor/bin/phpunit tests",
+        "pint": "vendor/bin/pint",
+        "pint:test": "vendor/bin/pint --test",
+        "cs": [
+            "@pint"
+        ],
+        "phpstan": "vendor/bin/phpstan analyse"
     }
 }

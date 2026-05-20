@@ -1,0 +1,31 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method Junges\\TrackableJobs\\Contracts\\TrackableJobContract\:\:trackable\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Contracts/TrackableJobContract.php
+
+		-
+			message: '#^Method Junges\\TrackableJobs\\Models\\TrackedJob\:\:markAsFinished\(\) has parameter \$message with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Models/TrackedJob.php
+
+		-
+			message: '#^Method Junges\\TrackableJobs\\Models\\TrackedJob\:\:setOutput\(\) has parameter \$output with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Models/TrackedJob.php
+
+		-
+			message: '#^Method Junges\\TrackableJobs\\Models\\TrackedJob\:\:trackable\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Models/TrackedJob.php
+
+		-
+			message: '#^Cannot call method markAsFailed\(\) on Junges\\TrackableJobs\\Models\\TrackedJob\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/TrackableJob.php
