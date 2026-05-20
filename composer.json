@@ -47,7 +47,8 @@
         "pint": "vendor/bin/pint",
         "pint:test": "vendor/bin/pint --test",
         "cs": [
-            "@pint"
+            "@pint",
+            "@phpstan"
         ],
         "phpstan": "vendor/bin/phpstan analyse"
     }
