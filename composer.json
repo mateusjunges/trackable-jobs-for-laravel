@@ -11,14 +11,14 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/support": "^11.0|^12.0|^13.0",
-        "illuminate/queue": "^11.0|^12.0|^13.0",
-        "illuminate/database": "^11.0|^12.0|^13.0",
+        "php": "^8.3",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/queue": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
         "laravel/pint": "dev-main"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "phpunit/phpunit": "^9.5|^10.5|^11.5.3|^12.5.12",
         "spatie/test-time": "^1.2"
     },
